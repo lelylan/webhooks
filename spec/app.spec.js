@@ -14,7 +14,8 @@ describe('when a new event happens', function() {
   var fixture = __dirname + '/fixtures/event.json';
 
   // Open the stream to raise the HTTP request
-  Event.find().tailable().stream().on('data', function (doc) { logic.execute(doc); });
+  Event.find({ processed_subscriptions: false })
+    .tailable().stream().on('data', function (doc) { logic.execute(doc); });
 
   // Mock the HTTP request
   beforeEach(function() { callback = nock('http://www.google.com').get('/').reply(200); });
