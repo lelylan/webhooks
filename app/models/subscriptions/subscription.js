@@ -1,10 +1,11 @@
 var mongoose = require('mongoose')
-  , db = mongoose.createConnection('localhost', 'jobs_test');
+  , db = mongoose.createConnection('localhost', 'subscriptions_test');
 
-var eventSchema = new mongoose.Schema({
+var SubscriptionSchema = new mongoose.Schema({
+    client_id: mongoose.Schema.Types.ObjectId,
     resource: String,
     event: String,
-    body: mongoose.Schema.Types.Mixed
+    callback_uri: String
 })
 
 module.exports = db.model('Event', eventSchema);

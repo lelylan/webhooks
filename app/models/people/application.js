@@ -1,10 +1,7 @@
 var mongoose = require('mongoose')
-  , db = mongoose.createConnection('localhost', 'jobs_test');
+  , db = mongoose.createConnection('localhost', 'people_test');
 
-var eventSchema = new mongoose.Schema({
-    resource: String,
-    event: String,
-    body: mongoose.Schema.Types.Mixed
+var applicationSchema = new mongoose.Schema({
 })
 
-module.exports = db.model('Event', eventSchema);
+module.exports = db.model('Application', applicationSchema);
