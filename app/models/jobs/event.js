@@ -3,9 +3,10 @@ var mongoose = require('mongoose')
 
 var eventSchema = new mongoose.Schema({
     resource_owner_id: mongoose.Schema.Types.ObjectId,
+    body: mongoose.Schema.Types.Mixed,
     resource: String,
     event: String,
-    body: mongoose.Schema.Types.Mixed
+    processed_subscriptions: { type: Boolean, default: false }
 })
 
 module.exports = db.model('Event', eventSchema);
