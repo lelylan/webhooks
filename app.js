@@ -1,8 +1,8 @@
-var fs      = require('fs')
+var fs    = require('fs')
 , url     = require('url')
 , emitter = require('events').EventEmitter
-, event   = require('./lib/event');
+, events  = require('./lib/events');
 
-event.connect(function(collection) {
-  event.execute(collection);
+events.connect(function(collection) {
+  events.execute(collection);
 });
