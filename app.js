@@ -1,8 +1,8 @@
-var fs    = require('fs')
-, url     = require('url')
-, emitter = require('events').EventEmitter
-, events  = require('./lib/events');
+var Event = require('./app/models/event');
 
-events.connect(function(collection) {
-  events.execute(collection);
+var stream = Event.find().tailable().stream();
+
+stream.on('data', function (doc) {
+  console.log("Executing event identified by the ID", doc._id);
 });
+
