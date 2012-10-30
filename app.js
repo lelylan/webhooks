@@ -1,4 +1,4 @@
-var Event = require('./app/models/event');
+var Event = require('./app/models/jobs/event');
 
 var stream = Event.find().tailable().stream();
 
