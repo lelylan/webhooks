@@ -14,7 +14,7 @@ describe('when a new event happens', function() {
   var fixture = __dirname + '/fixtures/event.json';
 
   // Open the stream to raise the HTTP request
-  Event.find({ processed_subscriptions: false })
+  Event.find({ subscription_processed: false })
     .tailable().stream().on('data', function (doc) { logic.execute(doc); });
 
   // Mock the HTTP request
