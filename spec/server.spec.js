@@ -1,16 +1,30 @@
-var nock    = require('nock');
-var http    = require('http');
-var request = require('request');
+var nock    = require('nock')
+  , http    = require('http')
+  , request = require('request');
 
-describe('when requires a resource', function() {
+var mongodb = require('mongodb')
+  , eventTable  = undefined
+  , server  = new mongodb.Server("127.0.0.1", 27017, {});
 
-  var fixture = __dirname + '/fixtures/devices.json';
-  var scope = nock('http://localhost:8000').get('/devices').replyWithFile('201', fixture);
+new mongodb.Db('jobs_test', server, {}).open(function (error, db) {
+  if (error) throw error;
+  db.collection("events", function (err, collection) { test_db = collection })
+})
 
-  it('keeps status code', function(done) { 
-    request('http://localhost:8000/devices', function(error, res, body) {
-      expect(res.statusCode).toEqual('201');
+
+
+describe('when a new event happen', function() {
+
+  var callback = nock('http://callback.com/').post('/lelylan', { body : {} }).reply(200);
+
+  var event = eventTable.insert({ resource: 'status', event: 'update', body: {} }, {},
+  function(err, documents) { if (err) throw error; })
+
+  it('fires a callback', function(done) {
+    request("http://localhost:8001/test", function(error, response, body){
+      callback.done();
       done();
     });
+
   });
 });
