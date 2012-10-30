@@ -3,7 +3,8 @@ var mongoose = require('mongoose')
 
 var eventSchema = new mongoose.Schema({
     resource: String,
-    event: String
+    event: String,
+    body: mongoose.Schema.Types.Mixed
 })
 
 module.exports = db.model('Event', eventSchema);
