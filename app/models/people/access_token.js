@@ -3,7 +3,7 @@ var mongoose = require('mongoose')
 
 var accessTokenSchema = new mongoose.Schema({
     resource_owner_id: mongoose.Schema.Types.ObjectId,
-    application: monogoose.Schema.Types.ObjectId,
+    application: mongoose.Schema.Types.ObjectId,
     expires_in: Number
 })
 

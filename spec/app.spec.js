@@ -1,31 +1,33 @@
 var nock    = require('nock')
   , fs      = require('fs')
-  , request = require('request')
-  , Event   = require('../app/models/jobs/event');
+  , request = require('request');
 
-var stream   = Event.find().tailable().stream()
-  , callback = undefined
-  , event    = undefined;
-
+var Event        = require('../app/models/jobs/event')
+  , Subscription = require('../app/models/subscriptions/subscription')
+  , User         = require('../app/models/people/user')
+  , Application  = require('../app/models/people/application')
+  , AccessToken  = require('../app/models/people/access_token');
 
 describe('when a new event happens', function() {
 
+  var user, app, token, event, sub, callback;
   var fixture = __dirname + '/fixtures/event.json';
 
   // Open the stream to raise the HTTP request
-  stream.on('data', function (doc) {
+  Event.find().tailable().stream().on('data', function (doc) {
     request('http://www.google.com/', function (error, response, body) {})
-  })
+  });
 
   beforeEach(function() {
-    // Set the expected callback
     callback = nock('http://www.google.com').get('/').reply(200);
+  });
 
-    // Add a new event to be parsed by the stream
-    Event.create({ resource: 'status', event: 'update', body: {} }, function (err, doc) {
-      if (err) console.log("Error on creating an event record.", err.message)
-      event = doc;
-    })
+  beforeEach(function(){
+    user  = User.create({ });
+    app   = Application.create({ });
+    token = AccessToken.create({ resource_owner_id: user._id, application: app._id, expires_in: 7200 })
+    event = Event.create({ resource: 'status', event: 'update', body: {} }, function (err, doc) {});
+    subs  = Subscription.create({ client_id: app._id, resource: 'status', event: 'update', callback: 'http://www.google.com'} );
   });
 
   it('fires a callback', function(done) {
