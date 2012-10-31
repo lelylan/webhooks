@@ -1,42 +1,37 @@
-var nock    = require('nock')
-  , fs      = require('fs')
-  , request = require('request')
-  , Event   = require('../app/models/event');
+var nock  = require('nock')
+  , fs    = require('fs')
+  , logic = require('../lib/logic');
 
-var stream   = Event.find().tailable().stream()
-  , callback = undefined
-  , event    = undefined;
-
+var Event        = require('../app/models/jobs/event')
+  , Subscription = require('../app/models/subscriptions/subscription')
+  , User         = require('../app/models/people/user')
+  , Application  = require('../app/models/people/application')
+  , AccessToken  = require('../app/models/people/access_token');
 
 describe('when a new event happens', function() {
 
+  var user, application, token, event, sub, callback;
   var fixture = __dirname + '/fixtures/event.json';
 
   // Open the stream to raise the HTTP request
-  stream.on('data', function (doc) {
-    request('http://www.google.com/', function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-        console.log("----- The mocked request has been satisfied", response.statusCode)
-      }
-    })
+  Event.find({ subscription_processed: false })
+    .tailable().stream().on('data', function (doc) { logic.execute(doc); });
+
+  // Mock the HTTP request
+  beforeEach(function() { callback = nock('http://www.google.com').get('/').reply(200); });
+
+  // Create the needed data
+  beforeEach(function(){
+    User.create({ }, function (err, doc) { user = doc; });
+    Application.create({ }, function (err, doc) { application = doc} );
+    setTimeout(function() { AccessToken.create({ resource_owner_id: user._id, application: application._id, expires_in: 7200 }, function (err, doc) { token = doc }) }, 200);
+    setTimeout(function() { Subscription.create({ client_id: application._id, resource: 'status', event: 'update', callback: 'http://www.google.com'}, function (err, doc) { subscription = doc }); }, 200);
+    setTimeout(function() { Event.create({ resource_owner_id: user._id, resource: 'status', event: 'update', body: {} }, function (err, doc) { event = doc }); }, 200)
+    //setTimeout(function() { console.log(user)}, 500);
   });
 
-  beforeEach(function() {
-    // Set the expected callback
-    console.log("----- Storing the nock request");
-    callback = nock('http://www.google.com').get('/').reply(200);
-
-    // Add a new event to be parsed by the stream
-    Event.create({ resource: 'status', event: 'update', body: {} }, function (err, doc) {
-      if (err) console.log("Error on creating an event record.", err.message)
-      console.log("----- Event with ID", doc._id, "successfully created");
-      event = doc;
-    })
-  });
-
-  it('fires a callback', function(done) {
+  it('makes an HTTP request to the subscription URI callback', function(done) {
     // will throw an assertion error if meanwhile a request was not performed
-    setTimeout(function() { callback.done(); done(); }, 1000);
+    setTimeout(function() { callback.done(); done(); }, 400);
   });
-
 });
