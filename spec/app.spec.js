@@ -8,61 +8,120 @@ var Event        = require('../app/models/jobs/event')
   , Application  = require('../app/models/people/application')
   , AccessToken  = require('../app/models/people/access_token');
 
-//
-// Access token related specs
-//
 
-describe('when a new event happens', function() {
+describe('Event.new()', function() {
 
-  var user, application, token, event, sub, callback;
+  var user, another_user, application, token, event, sub, callback;
   var fixture = __dirname + '/fixtures/event.json';
 
-  // Opens the stream to catch the HTTP request
   logic.execute();
 
-  // Create basic factory data
   beforeEach(function() {
     User.create({ }, function (err, doc) { user = doc; });
+    User.create({ }, function (err, doc) { another_user = doc; });
     Application.create({ }, function (err, doc) { application = doc} );
   });
 
-  describe('with a valid access token', function() {
 
-    // Create tested factory data
-    beforeEach(function() {
-      setTimeout(function() {
-        AccessToken.create({ resource_owner_id: user._id, application: application._id, expires_in: 7200 }, function (err, doc) { token = doc; });
-        Subscription.create({ client_id: application._id, resource: 'status', event: 'update', callback: 'http://www.google.com'}, function (err, doc) { subscription = doc });
-        Event.create({ resource_owner_id: user._id, resource: 'status', event: 'update', body: {} }, function (err, doc) { event = doc });
-      }, 200); // needed delay to have valid user and app
+  // ------------------------------
+  // Subscription related specs
+  // ------------------------------
+
+  describe('With a subscription', function(){
+
+    describe('with correct resource and event', function() {
+
+      beforeEach(function() { callback = nock('http://www.google.com').get('/').reply(200); });
+
+      beforeEach(function() {
+        setTimeout(function() {
+          AccessToken.create({ resource_owner_id: user._id, application: application._id, expires_in: 7200 }, function (err, doc) { token = doc; });
+          Subscription.create({ client_id: application._id, resource: 'status', event: 'update', callback: 'http://www.google.com'}, function (err, doc) { subscription = doc });
+          Event.create({ resource_owner_id: user._id, resource: 'status', event: 'update', body: {} }, function (err, doc) { event = doc });
+        }, 200); // needed delay to have valid user and app
+      });
+
+      it('makes an HTTP request to the subscription URI callback', function(done) {
+        setTimeout(function() { expect(callback.isDone()).toBe(true); done(); }, 400);
+      });
     });
 
-    // Mock the HTTP request
-    beforeEach(function() { callback = nock('http://www.google.com').get('/').reply(200); });
+    describe('with a not valid resource', function() {
 
-    // Throws an assertion error if a request was not performed
-    it('makes an HTTP request to the subscription URI callback', function(done) {
-      setTimeout(function() { expect(callback.isDone()).toBe(true); done(); }, 400);
-    });
-  });
+      beforeEach(function() { callback = nock('http://www.google.com').get('/').reply(200); });
 
-  describe('with a blocked access token', function() {
+      beforeEach(function() {
+        setTimeout(function() {
+          AccessToken.create({ revoked_at: Date.now(), resource_owner_id: user._id, application: application._id, expires_in: 7200 }, function (err, doc) { token = doc; });
+          Subscription.create({ client_id: application._id, resource: 'status', event: 'update', callback: 'http://www.google.com'}, function (err, doc) { subscription = doc });
+          Event.create({ resource_owner_id: user._id, resource: 'device', event: 'update', body: {} }, function (err, doc) { event = doc });
+        }, 200); // needed delay to have valid user and app
+      });
 
-    // Mock the HTTP request
-    beforeEach(function() { callback = nock('http://www.google.com').get('/').reply(200); });
+      it('does not make an HTTP request to the subscription URI callback', function(done) {
+        setTimeout(function() { expect(callback.isDone()).toBe(false); done(); }, 400);
+      });
+    })
 
-    // Create tested factory data
-    beforeEach(function() {
-      setTimeout(function() {
-        AccessToken.create({ revoked_at: Date.now(), resource_owner_id: user._id, application: application._id, expires_in: 7200 }, function (err, doc) { token = doc; });
-        Subscription.create({ client_id: application._id, resource: 'status', event: 'update', callback: 'http://www.google.com'}, function (err, doc) { subscription = doc });
-        Event.create({ resource_owner_id: user._id, resource: 'status', event: 'update', body: {} }, function (err, doc) { event = doc });
-      }, 200); // needed delay to have valid user and app
-    });
+    describe('with a not valid event', function() {
 
-    // Throws an assertion error if a request was not performed
-    it('does not make an HTTP request to the subscription URI callback', function(done) {
-      setTimeout(function() { expect(callback.isDone()).toBe(false); done(); }, 600);
-    });
+      beforeEach(function() { callback = nock('http://www.google.com').get('/').reply(200); });
+
+      beforeEach(function() {
+        setTimeout(function() {
+          AccessToken.create({ revoked_at: Date.now(), resource_owner_id: user._id, application: application._id, expires_in: 7200 }, function (err, doc) { token = doc; });
+          Subscription.create({ client_id: application._id, resource: 'device', event: 'update', callback: 'http://www.google.com'}, function (err, doc) { subscription = doc });
+          Event.create({ resource_owner_id: user._id, resource: 'status', event: 'create', body: {} }, function (err, doc) { event = doc });
+        }, 200); // needed delay to have valid user and app
+      });
+
+      it('does not make an HTTP request to the subscription URI callback', function(done) {
+        setTimeout(function() { expect(callback.isDone()).toBe(false); done(); }, 400);
+      });
+    })
+
   })
+
+
+  // ------------------------------
+  // Access token related specs
+  // ------------------------------
+
+  describe('With an access token', function(){
+
+    describe('when blocked', function() {
+
+      beforeEach(function() { callback = nock('http://www.google.com').get('/').reply(200); });
+
+      beforeEach(function() {
+        setTimeout(function() {
+          AccessToken.create({ revoked_at: Date.now(), resource_owner_id: user._id, application: application._id, expires_in: 7200 }, function (err, doc) { token = doc; });
+          Subscription.create({ client_id: application._id, resource: 'status', event: 'update', callback: 'http://www.google.com'}, function (err, doc) { subscription = doc });
+          Event.create({ resource_owner_id: user._id, resource: 'status', event: 'update', body: {} }, function (err, doc) { event = doc });
+        }, 200); // needed delay to have valid user and app
+      });
+
+      it('does not make an HTTP request to the subscription URI callback', function(done) {
+        setTimeout(function() { expect(callback.isDone()).toBe(false); done(); }, 400);
+      });
+    })
+
+    describe('with an event having the resource owner id that has not access tokens', function() {
+
+      beforeEach(function() { callback = nock('http://www.google.com').get('/').reply(200); });
+
+      beforeEach(function() {
+        setTimeout(function() {
+          AccessToken.create({ resource_owner_id: user._id, application: application._id, expires_in: 7200 }, function (err, doc) { token = doc; });
+          Subscription.create({ client_id: application._id, resource: 'status', event: 'update', callback: 'http://www.google.com'}, function (err, doc) { subscription = doc });
+          Event.create({ resource_owner_id: another_user._id, resource: 'status', event: 'update', body: {} }, function (err, doc) { event = doc });
+        }, 200); // needed delay to have valid user and app
+      });
+
+      it('does not make an HTTP request to the subscription URI callback', function(done) {
+        setTimeout(function() { expect(callback.isDone()).toBe(false); done(); }, 400);
+      });
+    })
+  })
+
 });
