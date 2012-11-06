@@ -2,25 +2,27 @@ var nock  = require('nock')
   , fs    = require('fs')
   , logic = require('../lib/logic');
 
-var Event        = require('../app/models/jobs/event')
-  , Subscription = require('../app/models/subscriptions/subscription')
-  , User         = require('../app/models/people/user')
-  , Application  = require('../app/models/people/application')
-  , AccessToken  = require('../app/models/people/access_token');
+var Factory      = require('factory-lady')
+  , Event        = require('./factories/jobs/event')
+  , Subscription = require('./factories/subscriptions/subscription')
+  , User         = require('./factories/people/user')
+  , Application  = require('./factories/people/application')
+  , AccessToken  = require('./factories/people/access_token');
 
 
 describe('Event.new()', function() {
 
   var user, another_user, application, another_application, token, event, sub, callback;
   var fixture = __dirname + '/fixtures/event.json';
+  var f = function(doc) { } // make factory definition more clean
 
   logic.execute();
 
   beforeEach(function() {
-    User.create({ }, function (err, doc) { user = doc; });
-    User.create({ }, function (err, doc) { another_user = doc; });
-    Application.create({ }, function (err, doc) { application = doc} );
-    Application.create({ }, function (err, doc) { another_application = doc} );
+    Factory.create('user', function (doc) { user = doc; });
+    Factory.create('user', function (doc) { another_user = doc; });
+    Factory.create('application', function (doc) { application = doc} );
+    Factory.create('application', function (doc) { another_application = doc} );
   });
 
 
@@ -34,9 +36,9 @@ describe('Event.new()', function() {
 
     beforeEach(function() {
       setTimeout(function() {
-        AccessToken.create({ resource_owner_id: user._id, application: application._id, expires_in: 7200 }, function (err, doc) { token = doc; });
-        Subscription.create({ client_id: application._id, resource: 'status', event: 'update', callback: 'http://www.google.com'}, function (err, doc) { subscription = doc });
-        Event.create({ resource_owner_id: user._id, resource: 'status', event: 'update', body: {} }, function (err, doc) { event = doc });
+        Factory.create('access_token', { resource_owner_id: user.id, application: application.id }, f);
+        Factory.create('subscription', { client_id: application.id }, f);
+        Factory.create('event', { resource_owner_id: user._id }, f);
       }, 200); // needed delay to have valid user and app
     });
 
@@ -53,11 +55,11 @@ describe('Event.new()', function() {
 
     beforeEach(function() {
       setTimeout(function() {
-        AccessToken.create({ resource_owner_id: user._id, application: application._id, expires_in: 7200 }, function (err, doc) { token = doc; });
-        Subscription.create({ client_id: application._id, resource: 'status', event: 'update', callback: 'http://www.google.com'}, function (err, doc) { subscription = doc });
-        AccessToken.create({ resource_owner_id: user._id, application: another_application._id, expires_in: 7200 }, function (err, doc) { token = doc; });
-        Subscription.create({ client_id: another_application._id, resource: 'status', event: 'update', callback: 'http://www.google.com'}, function (err, doc) { subscription = doc });
-        Event.create({ resource_owner_id: user._id, resource: 'status', event: 'update', body: {} }, function (err, doc) { event = doc });
+        Factory.create('access_token', { resource_owner_id: user.id, application: application.id }, f);
+        Factory.create('subscription', { client_id: application.id }, f);
+        Factory.create('access_token', { resource_owner_id: user.id, application: another_application.id }, f);
+        Factory.create('subscription', { client_id: another_application.id }, f);
+        Factory.create('event', { resource_owner_id: user._id }, f);
       }, 200); // needed delay to have valid user and app
     });
 
@@ -72,8 +74,8 @@ describe('Event.new()', function() {
 
     beforeEach(function() {
       setTimeout(function() {
-        AccessToken.create({ resource_owner_id: user._id, application: application._id, expires_in: 7200 }, function (err, doc) { token = doc; });
-        Event.create({ resource_owner_id: user._id, resource: 'status', event: 'update', body: {} }, function (err, doc) { event = doc });
+        Factory.create('access_token', { resource_owner_id: user.id, application: application.id }, f);
+        Factory.create('event', { resource_owner_id: user._id }, f);
       }, 200); // needed delay to have valid user and app
     });
 
@@ -88,9 +90,9 @@ describe('Event.new()', function() {
 
     beforeEach(function() {
       setTimeout(function() {
-        AccessToken.create({ revoked_at: Date.now(), resource_owner_id: user._id, application: application._id, expires_in: 7200 }, function (err, doc) { token = doc; });
-        Subscription.create({ client_id: application._id, resource: 'status', event: 'update', callback: 'http://www.google.com'}, function (err, doc) { subscription = doc });
-        Event.create({ resource_owner_id: user._id, resource: 'device', event: 'update', body: {} }, function (err, doc) { event = doc });
+        Factory.create('access_token', { resource_owner_id: user.id, application: application.id }, f);
+        Factory.create('subscription', { client_id: application.id }, f);
+        Factory.create('event', { resource_owner_id: user._id, resource: 'device' }, f);
       }, 200); // needed delay to have valid user and app
     });
 
@@ -105,9 +107,9 @@ describe('Event.new()', function() {
 
     beforeEach(function() {
       setTimeout(function() {
-        AccessToken.create({ revoked_at: Date.now(), resource_owner_id: user._id, application: application._id, expires_in: 7200 }, function (err, doc) { token = doc; });
-        Subscription.create({ client_id: application._id, resource: 'device', event: 'update', callback: 'http://www.google.com'}, function (err, doc) { subscription = doc });
-        Event.create({ resource_owner_id: user._id, resource: 'status', event: 'create', body: {} }, function (err, doc) { event = doc });
+        Factory.create('access_token', { resource_owner_id: user.id, application: application.id }, f);
+        Factory.create('subscription', { client_id: application.id }, f);
+        Factory.create('event', { resource_owner_id: user._id, event: 'create' }, f);
       }, 200); // needed delay to have valid user and app
     });
 
@@ -127,9 +129,9 @@ describe('Event.new()', function() {
 
     beforeEach(function() {
       setTimeout(function() {
-        AccessToken.create({ revoked_at: Date.now(), resource_owner_id: user._id, application: application._id, expires_in: 7200 }, function (err, doc) { token = doc; });
-        Subscription.create({ client_id: application._id, resource: 'status', event: 'update', callback: 'http://www.google.com'}, function (err, doc) { subscription = doc });
-        Event.create({ resource_owner_id: user._id, resource: 'status', event: 'update', body: {} }, function (err, doc) { event = doc });
+        Factory.create('access_token', { revoked_at: Date.now(), resource_owner_id: user.id, application: application.id }, f);
+        Factory.create('subscription', { client_id: application.id }, f);
+        Factory.create('event', { resource_owner_id: user._id }, f);
       }, 200); // needed delay to have valid user and app
     });
 
@@ -138,15 +140,15 @@ describe('Event.new()', function() {
     });
   });
 
-  describe('when the event has a resource owner id that has not valid access tokens', function() {
+  describe('when the resource owner did not subscribe to a third party app', function() {
 
     beforeEach(function() { callback = nock('http://www.google.com').get('/').reply(200); });
 
     beforeEach(function() {
       setTimeout(function() {
-        AccessToken.create({ resource_owner_id: user._id, application: application._id, expires_in: 7200 }, function (err, doc) { token = doc; });
-        Subscription.create({ client_id: application._id, resource: 'status', event: 'update', callback: 'http://www.google.com'}, function (err, doc) { subscription = doc });
-        Event.create({ resource_owner_id: another_user._id, resource: 'status', event: 'update', body: {} }, function (err, doc) { event = doc });
+        Factory.create('access_token', { resource_owner_id: user.id, application: application.id }, f);
+        Factory.create('subscription', { client_id: application.id }, f);
+        Factory.create('event', { resource_owner_id: another_user._id }, f);
       }, 200); // needed delay to have valid user and app
     });
 
