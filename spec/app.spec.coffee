@@ -33,10 +33,10 @@ describe 'Event.new()', ->
         Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
         Factory.create 'event',        { resource_owner_id: user._id }, (doc) ->
-      ), 200 # needed delay to have valid user and app
+      ), 300 # needed delay to have valid user and app
 
     it 'makes an HTTP request to the subscription URI callback', (done) ->
-      setTimeout ( -> expect(callback.isDone()).toBe(true); done() ), 400
+      setTimeout ( -> expect(callback.isDone()).toBe(true); done() ), 600
 
 
   describe 'when the event matches more than one subscription', ->
@@ -50,10 +50,10 @@ describe 'Event.new()', ->
         Factory.create 'access_token', { resource_owner_id: user.id, application: another_application.id }, (doc) ->
         Factory.create 'subscription', { client_id: another_application.id }, (doc) ->
         Factory.create 'event',        { resource_owner_id: user._id }, (doc) ->
-      ) , 200 # needed delay to have valid user and app
+      ) , 300 # needed delay to have valid user and app
 
     it 'makes an HTTP request to the subscription URI callback', (done) ->
-      setTimeout ( -> expect(callback.isDone()).toBe(true); done() ), 400
+      setTimeout ( -> expect(callback.isDone()).toBe(true); done() ), 600
 
 
   describe 'when there are no subscriptions', ->
@@ -64,10 +64,10 @@ describe 'Event.new()', ->
       setTimeout ( ->
         Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
         Factory.create 'event', { resource_owner_id: user._id }, (doc) ->
-      ), 200 # needed delay to have valid user and app
+      ), 300 # needed delay to have valid user and app
 
     it 'makes an HTTP request to the subscription URI callback', (done) ->
-      setTimeout ( -> expect(callback.isDone()).toBe(false); done() ), 400
+      setTimeout ( -> expect(callback.isDone()).toBe(false); done() ), 600
 
 
   describe 'when the event does not match the subscription because of the resource', ->
@@ -79,10 +79,10 @@ describe 'Event.new()', ->
         Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
         Factory.create 'event',        { resource_owner_id: user._id, resource: 'device' }, (doc) ->
-      ), 200 # needed delay to have valid user and app
+      ), 300 # needed delay to have valid user and app
 
     it 'does not make an HTTP request to the subscription URI callback', (done) ->
-      setTimeout ( -> expect(callback.isDone()).toBe(false); done() ), 400
+      setTimeout ( -> expect(callback.isDone()).toBe(false); done() ), 600
 
 
   describe 'with the event does not match the subscriptio because of the event', ->
@@ -94,10 +94,10 @@ describe 'Event.new()', ->
         Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
         Factory.create 'event',        { resource_owner_id: user._id, event: 'create' }, (doc) ->
-      ), 200 # needed delay to have valid user and app
+      ), 300 # needed delay to have valid user and app
 
     it 'does not make an HTTP request to the subscription URI callback', (done) ->
-      setTimeout ( -> expect(callback.isDone()).toBe(false); done() ), 400
+      setTimeout ( -> expect(callback.isDone()).toBe(false); done() ), 600
 
 
   describe 'when the access token is blocked', ->
@@ -109,10 +109,10 @@ describe 'Event.new()', ->
         Factory.create 'access_token', { revoked_at: Date.now(), resource_owner_id: user.id, application: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
         Factory.create 'event', { resource_owner_id: user._id }, (doc) ->
-      ), 200 # needed delay to have valid user and app
+      ), 300 # needed delay to have valid user and app
 
     it 'does not make an HTTP request to the subscription URI callback', (done) ->
-      setTimeout ( -> expect(callback.isDone()).toBe(false); done(); ), 400
+      setTimeout ( -> expect(callback.isDone()).toBe(false); done(); ), 600
 
 
   describe 'when the resource owner did not subscribe to a third party app', ->
@@ -124,7 +124,7 @@ describe 'Event.new()', ->
         Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
         Factory.create 'event', { resource_owner_id: another_user._id }, (doc) ->
-      ), 200 # needed delay to have valid user and app
+      ), 300 # needed delay to have valid user and app
 
     it 'does not make an HTTP request to the subscription URI callback', (done) ->
-      setTimeout ( -> expect(callback.isDone()).toBe(false); done(); ), 400
+      setTimeout ( -> expect(callback.isDone()).toBe(false); done(); ), 600
