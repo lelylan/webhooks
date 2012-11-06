@@ -119,9 +119,9 @@ describe('Event.new()', function() {
   });
 
 
-  //// ----------------------
-  //// Token related specs
-  //// ----------------------
+  // ----------------------
+  // Token related specs
+  // ----------------------
 
   describe('when the access token is blocked', function() {
 
