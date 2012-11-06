@@ -14,7 +14,7 @@ describe('when a new event happens', function() {
   var fixture = __dirname + '/fixtures/event.json';
 
   // Open the stream to raise the HTTP request
-  Event.find({ subscription_processed: false })
+  Event.find({ callback_processed: false })
     .tailable().stream().on('data', function (doc) { logic.execute(doc); });
 
   // Mock the HTTP request
@@ -27,11 +27,10 @@ describe('when a new event happens', function() {
     setTimeout(function() { AccessToken.create({ resource_owner_id: user._id, application: application._id, expires_in: 7200 }, function (err, doc) { token = doc }) }, 200);
     setTimeout(function() { Subscription.create({ client_id: application._id, resource: 'status', event: 'update', callback: 'http://www.google.com'}, function (err, doc) { subscription = doc }); }, 200);
     setTimeout(function() { Event.create({ resource_owner_id: user._id, resource: 'status', event: 'update', body: {} }, function (err, doc) { event = doc }); }, 200)
-    //setTimeout(function() { console.log(user)}, 500);
   });
 
+  // Throws an assertion error if a request was not performed
   it('makes an HTTP request to the subscription URI callback', function(done) {
-    // will throw an assertion error if meanwhile a request was not performed
-    setTimeout(function() { callback.done(); done(); }, 400);
+    setTimeout(function() { expect(callback.isDone()).toBe(true); done(); }, 400);
   });
 });

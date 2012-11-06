@@ -6,7 +6,7 @@ var eventSchema = new mongoose.Schema({
     body: mongoose.Schema.Types.Mixed,
     resource: String,
     event: String,
-    subscription_processed: { type: Boolean, default: false }
+    callback_processed: { type: Boolean, default: false }
 })
 
 module.exports = db.model('Event', eventSchema);
