@@ -53,7 +53,7 @@ findTokens = (event) ->
       setCallbackProcessed() if subscriptions.length == 0
 
       for subscription in subscriptions
-        request('http://www.google.com/', (err, response, body) ->
+        request(subscription.callback_uri, (err, response, body) ->
           setCallbackProcessed();
         )
 
