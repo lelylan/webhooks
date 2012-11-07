@@ -29,7 +29,7 @@ describe 'Event.new()', ->
   logic.execute()
 
   # Remove previous records from the DB
-  beforeEach -> helper.cleanDB
+  beforeEach -> helper.cleanDB()
 
   # Create shared factories
   beforeEach ->
@@ -40,146 +40,146 @@ describe 'Event.new()', ->
 
 
 
-  #describe 'when the event matches the subscription and there is a valid access token', ->
+  describe 'when the event matches the subscription and there is a valid access token', ->
 
-    #beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(200)
+    beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(200)
 
-    ## Create the event and the related elements.
-    #beforeEach ->
-      #setTimeout ( ->
-        #Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
-        #Factory.create 'subscription', { client_id: application.id }, (doc) ->
-        #Factory.create 'event',        { resource_owner_id: user._id }, (doc) ->
-          #setTimeout ( -> Event.findById doc.id, (err, doc) -> event = doc ), factory_time / 2 # refreshed callback_processed value
-      #), factory_time # time needed to have valid user and application
+    # Create the event and the related elements.
+    beforeEach ->
+      setTimeout ( ->
+        Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
+        Factory.create 'subscription', { client_id: application.id }, (doc) ->
+        Factory.create 'event',        { resource_owner_id: user._id }, (doc) ->
+          setTimeout ( -> Event.findById doc.id, (err, doc) -> event = doc ), factory_time / 2 # refreshed callback_processed value
+      ), factory_time # time needed to have valid user and application
 
-    #it 'makes an HTTP request to the subscription URI callback', (done) ->
-      #setTimeout ( -> expect(callback.isDone()).toBe(true); done() ), process_time
+    it 'makes an HTTP request to the subscription URI callback', (done) ->
+      setTimeout ( -> expect(callback.isDone()).toBe(true); done() ), process_time
 
-    #it 'sets event#callback_processed field as processed', (done) ->
-      #setTimeout ( -> expect(event.callback_processed).toBe(true); done() ), process_time
-
-
-
-  #describe 'when the event matches more than one subscription', ->
-
-    #beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(200)
-                                                        #.post('/lelylan', json_device).reply(200)
-
-    #beforeEach ->
-      #setTimeout ( ->
-        #Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
-        #Factory.create 'subscription', { client_id: application.id }, (doc) ->
-        #Factory.create 'access_token', { resource_owner_id: user.id, application: another_application.id }, (doc) ->
-        #Factory.create 'subscription', { client_id: another_application.id }, (doc) ->
-        #Factory.create 'event',        { resource_owner_id: user._id }, (doc) ->
-          #setTimeout ( -> Event.findById doc.id, (err, doc) -> event = doc ), factory_time / 2 # refreshed callback_processed value
-      #), factory_time # time needed to have valid user and application
-
-    #it 'makes an HTTP request to the subscription URI callback', (done) ->
-      #setTimeout ( -> expect(callback.isDone()).toBe(true); done() ), process_time
-
-    #it 'sets event#callback_processed field as processed', (done) ->
-      #setTimeout ( -> expect(event.callback_processed).toBe(true); done() ), process_time
+    it 'sets event#callback_processed field as processed', (done) ->
+      setTimeout ( -> expect(event.callback_processed).toBe(true); done() ), process_time
 
 
 
-  #describe 'when there are no subscriptions', ->
+  describe 'when the event matches more than one subscription', ->
 
-    #beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(200)
+    beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(200)
+                                                        .post('/lelylan', json_device).reply(200)
 
-    #beforeEach ->
-      #setTimeout ( ->
-        #Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
-        #Factory.create 'event', { resource_owner_id: user._id }, (doc) ->
-          #setTimeout ( -> Event.findById doc.id, (err, doc) -> event = doc ), factory_time / 2 # refreshed callback_processed value
-      #), factory_time # time needed to have valid user and application
+    beforeEach ->
+      setTimeout ( ->
+        Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
+        Factory.create 'subscription', { client_id: application.id }, (doc) ->
+        Factory.create 'access_token', { resource_owner_id: user.id, application: another_application.id }, (doc) ->
+        Factory.create 'subscription', { client_id: another_application.id }, (doc) ->
+        Factory.create 'event',        { resource_owner_id: user._id }, (doc) ->
+          setTimeout ( -> Event.findById doc.id, (err, doc) -> event = doc ), factory_time / 2 # refreshed callback_processed value
+      ), factory_time # time needed to have valid user and application
 
-    #it 'makes an HTTP request to the subscription URI callback', (done) ->
-      #setTimeout ( -> expect(callback.isDone()).toBe(false); done() ), process_time
+    it 'makes an HTTP request to the subscription URI callback', (done) ->
+      setTimeout ( -> expect(callback.isDone()).toBe(true); done() ), process_time
 
-    #it 'sets event#callback_processed field as processed', (done) ->
-      #setTimeout ( -> expect(event.callback_processed).toBe(true); done() ), process_time
-
-
-
-  #describe 'when the event does not match the subscription because of the #resource field', ->
-
-    #beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(200)
-
-    #beforeEach ->
-      #setTimeout ( ->
-        #Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
-        #Factory.create 'subscription', { client_id: application.id }, (doc) ->
-        #Factory.create 'event',        { resource_owner_id: user._id, resource: 'device' }, (doc) ->
-          #setTimeout ( -> Event.findById doc.id, (err, doc) -> event = doc ), factory_time / 2 # refreshed callback_processed value
-      #), factory_time # time needed to have valid user and application
-
-    #it 'does not make an HTTP request to the subscription URI callback', (done) ->
-      #setTimeout ( -> expect(callback.isDone()).toBe(false); done() ), process_time
-
-    #it 'sets event#callback_processed field as processed', (done) ->
-      #setTimeout ( -> expect(event.callback_processed).toBe(true); done() ), process_time
+    it 'sets event#callback_processed field as processed', (done) ->
+      setTimeout ( -> expect(event.callback_processed).toBe(true); done() ), process_time
 
 
 
-  #describe 'when the event does not match the subscription because of the #event field', ->
+  describe 'when there are no subscriptions', ->
 
-    #beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(200)
+    beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(200)
 
-    #beforeEach ->
-      #setTimeout ( ->
-        #Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
-        #Factory.create 'subscription', { client_id: application.id }, (doc) ->
-        #Factory.create 'event',        { resource_owner_id: user._id, event: 'create' }, (doc) ->
-          #setTimeout ( -> Event.findById doc.id, (err, doc) -> event = doc ), factory_time / 2 # refreshed callback_processed value
-      #), factory_time # time needed to have valid user and application
+    beforeEach ->
+      setTimeout ( ->
+        Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
+        Factory.create 'event', { resource_owner_id: user._id }, (doc) ->
+          setTimeout ( -> Event.findById doc.id, (err, doc) -> event = doc ), factory_time / 2 # refreshed callback_processed value
+      ), factory_time # time needed to have valid user and application
 
-    #it 'does not make an HTTP request to the subscription URI callback', (done) ->
-      #setTimeout ( -> expect(callback.isDone()).toBe(false); done() ), process_time
+    it 'makes an HTTP request to the subscription URI callback', (done) ->
+      setTimeout ( -> expect(callback.isDone()).toBe(false); done() ), process_time
 
-    #it 'sets event#callback_processed field as processed', (done) ->
-      #setTimeout ( -> expect(event.callback_processed).toBe(true); done() ), process_time
-
-
-
-  #describe 'when the access token is blocked', ->
-
-    #beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(200)
-
-    #beforeEach ->
-      #setTimeout ( ->
-        #Factory.create 'access_token', { revoked_at: Date.now(), resource_owner_id: user.id, application: application.id }, (doc) ->
-        #Factory.create 'subscription', { client_id: application.id }, (doc) ->
-        #Factory.create 'event', { resource_owner_id: user._id }, (doc) ->
-          #setTimeout ( -> Event.findById doc.id, (err, doc) -> event = doc ), factory_time / 2 # refreshed callback_processed value
-      #), factory_time # time needed to have valid user and application
-
-    #it 'does not make an HTTP request to the subscription URI callback', (done) ->
-      #setTimeout ( -> expect(callback.isDone()).toBe(false); done() ), process_time
-
-    #it 'sets event#callback_processed field as processed', (done) ->
-      #setTimeout ( -> expect(event.callback_processed).toBe(true); done() ), process_time
+    it 'sets event#callback_processed field as processed', (done) ->
+      setTimeout ( -> expect(event.callback_processed).toBe(true); done() ), process_time
 
 
 
-  #describe 'when the resource owner did not subscribe to a third party app', ->
+  describe 'when the event does not match the subscription because of the #resource field', ->
 
-    #beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(200)
+    beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(200)
 
-    #beforeEach ->
-      #setTimeout ( ->
-        #Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
-        #Factory.create 'subscription', { client_id: application.id }, (doc) ->
-        #Factory.create 'event', { resource_owner_id: another_user._id }, (doc) ->
-          #setTimeout ( -> Event.findById doc.id, (err, doc) -> event = doc ), factory_time / 2 # refreshed callback_processed value
-      #), factory_time # time needed to have valid user and application
+    beforeEach ->
+      setTimeout ( ->
+        Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
+        Factory.create 'subscription', { client_id: application.id }, (doc) ->
+        Factory.create 'event',        { resource_owner_id: user._id, resource: 'device' }, (doc) ->
+          setTimeout ( -> Event.findById doc.id, (err, doc) -> event = doc ), factory_time / 2 # refreshed callback_processed value
+      ), factory_time # time needed to have valid user and application
 
-    #it 'does not make an HTTP request to the subscription URI callback', (done) ->
-      #setTimeout ( -> expect(callback.isDone()).toBe(false); done() ), process_time
+    it 'does not make an HTTP request to the subscription URI callback', (done) ->
+      setTimeout ( -> expect(callback.isDone()).toBe(false); done() ), process_time
 
-    #it 'sets event#callback_processed field as processed', (done) ->
-      #setTimeout ( -> expect(event.callback_processed).toBe(true); done() ), process_time
+    it 'sets event#callback_processed field as processed', (done) ->
+      setTimeout ( -> expect(event.callback_processed).toBe(true); done() ), process_time
+
+
+
+  describe 'when the event does not match the subscription because of the #event field', ->
+
+    beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(200)
+
+    beforeEach ->
+      setTimeout ( ->
+        Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
+        Factory.create 'subscription', { client_id: application.id }, (doc) ->
+        Factory.create 'event',        { resource_owner_id: user._id, event: 'create' }, (doc) ->
+          setTimeout ( -> Event.findById doc.id, (err, doc) -> event = doc ), factory_time / 2 # refreshed callback_processed value
+      ), factory_time # time needed to have valid user and application
+
+    it 'does not make an HTTP request to the subscription URI callback', (done) ->
+      setTimeout ( -> expect(callback.isDone()).toBe(false); done() ), process_time
+
+    it 'sets event#callback_processed field as processed', (done) ->
+      setTimeout ( -> expect(event.callback_processed).toBe(true); done() ), process_time
+
+
+
+  describe 'when the access token is blocked', ->
+
+    beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(200)
+
+    beforeEach ->
+      setTimeout ( ->
+        Factory.create 'access_token', { revoked_at: Date.now(), resource_owner_id: user.id, application: application.id }, (doc) ->
+        Factory.create 'subscription', { client_id: application.id }, (doc) ->
+        Factory.create 'event', { resource_owner_id: user._id }, (doc) ->
+          setTimeout ( -> Event.findById doc.id, (err, doc) -> event = doc ), factory_time / 2 # refreshed callback_processed value
+      ), factory_time # time needed to have valid user and application
+
+    it 'does not make an HTTP request to the subscription URI callback', (done) ->
+      setTimeout ( -> expect(callback.isDone()).toBe(false); done() ), process_time
+
+    it 'sets event#callback_processed field as processed', (done) ->
+      setTimeout ( -> expect(event.callback_processed).toBe(true); done() ), process_time
+
+
+
+  describe 'when the resource owner did not subscribe to a third party app', ->
+
+    beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(200)
+
+    beforeEach ->
+      setTimeout ( ->
+        Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
+        Factory.create 'subscription', { client_id: application.id }, (doc) ->
+        Factory.create 'event', { resource_owner_id: another_user._id }, (doc) ->
+          setTimeout ( -> Event.findById doc.id, (err, doc) -> event = doc ), factory_time / 2 # refreshed callback_processed value
+      ), factory_time # time needed to have valid user and application
+
+    it 'does not make an HTTP request to the subscription URI callback', (done) ->
+      setTimeout ( -> expect(callback.isDone()).toBe(false); done() ), process_time
+
+    it 'sets event#callback_processed field as processed', (done) ->
+      setTimeout ( -> expect(event.callback_processed).toBe(true); done() ), process_time
 
 
 
@@ -187,6 +187,7 @@ describe 'Event.new()', ->
 
     failing_callback = undefined
 
+    beforeEach -> nock.cleanAll();
     beforeEach -> failing_callback = nock('http://callback.com').post('/lelylan', json_device).reply(500)
     beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(200)
 

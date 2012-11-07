@@ -69,7 +69,7 @@ findTokens = (event, attempts = 0) ->
     # Schedule the failed HTTP request to the future
     scheduleFailedCallback = ->
       if attempts < process.env.MAX_ATTEMPTS
-        console.log('WARNING: The event', event.id, 'will be processed again in rescheduled', (Math.pow 3, attempts) * 1000)
+        console.log('WARNING: The event', event.id, 'will be processed again in', (Math.pow 3, attempts), 'sec')
         setTimeout ( -> findTokens event, attempts + 1 ), (Math.pow 3, attempts) * 1000
 
     #
