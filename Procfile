@@ -1,1 +1,1 @@
-web: $NODE_COMMAND web.js
+worker: coffee app.coffee
