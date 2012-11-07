@@ -1,4 +1,4 @@
-# $ node node_modules/jasmine-node/lib/jasmine-node/cli.js --autotest --coffee spec/
+# $ foreman run node node_modules/jasmine-node/lib/jasmine-node/cli.js --autotest --coffee spec/
 
 nock   = require 'nock'
 fs     = require 'fs'
@@ -16,10 +16,13 @@ require './factories/people/access_token'
 
 describe 'Event.new()', ->
 
-  user    = another_user = application = another_application = token = event = sub = callback = undefined;
-  fixture = __dirname + '/fixtures/event.json'
+  user = another_user = application = another_application = token = event = sub = callback = undefined;
   factory_time = 200
   process_time = 400
+  json_device  =
+    uri:  'http://api.lelylan.com/devices/5003c60ed033a96b96000009'
+    id:   '5003c60ed033a96b96000009'
+    name: 'Closet dimmer'
 
 
   # Listen to the new events in the queue
@@ -39,7 +42,7 @@ describe 'Event.new()', ->
 
   describe 'when the event matches the subscription and there is a valid access token', ->
 
-    beforeEach -> callback = nock('http://www.google.com').get('/').reply(200)
+    beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(200)
 
     # Create the event and the related elements.
     beforeEach ->
@@ -60,7 +63,8 @@ describe 'Event.new()', ->
 
   describe 'when the event matches more than one subscription', ->
 
-    beforeEach -> callback = nock('http://www.google.com').get('/').reply(200).get('/').reply(200);
+    beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(200)
+                                                        .post('/lelylan', json_device).reply(200)
 
     beforeEach ->
       setTimeout ( ->
@@ -82,7 +86,7 @@ describe 'Event.new()', ->
 
   describe 'when there are no subscriptions', ->
 
-    beforeEach -> callback = nock('http://www.google.com').get('/').reply(200)
+    beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(200)
 
     beforeEach ->
       setTimeout ( ->
@@ -101,7 +105,7 @@ describe 'Event.new()', ->
 
   describe 'when the event does not match the subscription because of the #resource field', ->
 
-    beforeEach -> callback = nock('http://www.google.com').get('/').reply(200)
+    beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(200)
 
     beforeEach ->
       setTimeout ( ->
@@ -121,7 +125,7 @@ describe 'Event.new()', ->
 
   describe 'when the event does not match the subscription because of the #event field', ->
 
-    beforeEach -> callback = nock('http://www.google.com').get('/').reply(200)
+    beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(200)
 
     beforeEach ->
       setTimeout ( ->
@@ -141,7 +145,7 @@ describe 'Event.new()', ->
 
   describe 'when the access token is blocked', ->
 
-    beforeEach -> callback = nock('http://www.google.com').get('/').reply(200)
+    beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(200)
 
     beforeEach ->
       setTimeout ( ->
@@ -161,7 +165,7 @@ describe 'Event.new()', ->
 
   describe 'when the resource owner did not subscribe to a third party app', ->
 
-    beforeEach -> callback = nock('http://www.google.com').get('/').reply(200)
+    beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(200)
 
     beforeEach ->
       setTimeout ( ->
