@@ -40,7 +40,7 @@ findTokens = (event) ->
       console.log "ERROR", err.message if (err)
 
       for subscription in subscriptions
-        request('http://www.google.com/', (error, response, body) ->
+        request('http://www.google.com/', (err, response, body) ->
           event.callback_processed = true; event.save()
         )
 
@@ -48,6 +48,5 @@ findTokens = (event) ->
     AccessToken.where('resource_owner_id').equals(event.resource_owner_id)
                .where('revoked_at').equals(undefined)
                .exec(findSubscriptions)
-
   )(event)
 

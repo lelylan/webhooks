@@ -1,1 +1,1 @@
-web: $NODE_COMMAND web.js
+web: coffee app.coffee

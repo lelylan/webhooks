@@ -14,5 +14,5 @@ AccessToken  = require '../app/models/people/access_token'
   AccessToken.find().remove()
   User.find().remove()
   Application.find().remove()
-  Event.find().remove()
+  # Event.find().remove() # We can not delete records in a capped collection
 )()
