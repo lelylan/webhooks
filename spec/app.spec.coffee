@@ -188,7 +188,7 @@ describe 'Event.new()', ->
     failing_callback = undefined
 
     beforeEach -> failing_callback = nock('http://callback.com').post('/lelylan', json_device).reply(500)
-    #beforeEach -> callback         = nock('http://callback.com').post('/lelylan', json_device).reply(200)
+    beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(200)
 
     # Create the event and the related elements.
     beforeEach ->
@@ -196,7 +196,7 @@ describe 'Event.new()', ->
         Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
         Factory.create 'event',        { resource_owner_id: user._id }, (doc) ->
-          setTimeout ( -> Event.findById doc.id, (err, doc) -> event = doc; console.log doc.callback_processed ), factory_time / 2 # refreshed callback_processed value
+          setTimeout ( -> Event.findById doc.id, (err, doc) -> event = doc ), factory_time / 2 # refreshed callback_processed value
       ), factory_time # time needed to have valid user and application
 
     describe 'when making the first HTTP request', ->
@@ -213,12 +213,17 @@ describe 'Event.new()', ->
           event.callback_processed = true; event.save(); done()
         ), process_time
 
-    #describe 'when making the next attempt', ->
-      #it 'sets event#callback_processed field as processed', (done) ->
-      #setTimeout ( ->
-        #console.log event
-        #expect(failing_callback.isDone()).toBe(true)
-        #expect(callback.isDone()).toBe(false)
-        #done()
-      #), process_time
+    describe 'when making the next attempt', ->
 
+      it 'calls the service returning 200', (done) ->
+        setTimeout ( ->
+          expect(callback.isDone()).toBe(true);
+          event.callback_processed = true; event.save(); done()
+        ), process_time + 1000
+
+      it 'sets event#callback_processed field as processed', (done) ->
+        setTimeout ( ->
+          Event.findById event.id, (err, doc) ->
+            expect(doc.callback_processed).toBe(true);
+            done();
+        ), (process_time) + 1000

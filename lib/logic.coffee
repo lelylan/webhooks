@@ -58,10 +58,10 @@ findTokens = (event, attempts = 0) ->
       request options, (err, response, body) ->
         console.log 'ERROR', err.message if err
         if (response.statusCode >= 200 && response.statusCode <= 299)
-          console.log "nooo", "200..299"
+          console.log "calling 200..299"
           setCallbackProcessed()
         else
-          console.log "siii", "300..599"
+          console.log "calling 300..599"
           scheduleFailedCallback()
 
 
@@ -69,13 +69,13 @@ findTokens = (event, attempts = 0) ->
     # Schedule the failed HTTP request to the future
     scheduleFailedCallback = ->
       if attempts < process.env.MAX_ATTEMPTS
-        console.log('rescheduled', process.env.MAX_ATTEMPTS)
-        #setTimeout ( -> findTokens event, attempts + 1 ), (Math.pow 3, attempts) * 1000
+        console.log('WARNING: The event', event.id, 'will be processed again in rescheduled', (Math.pow 3, attempts) * 1000)
+        setTimeout ( -> findTokens event, attempts + 1 ), (Math.pow 3, attempts) * 1000
 
     #
     # Set the callback_processed to true
     setCallbackProcessed = ->
-      console.log 'this should not be called'
+      console.log 'INFO: The event', event.id, 'has been processed'
       event.callback_processed = true; event.save()
 
     #
