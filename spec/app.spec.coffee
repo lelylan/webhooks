@@ -1,7 +1,9 @@
 helper = require './helper'
+logic  = require '../lib/logic'
+
+async  = require 'async'
 nock   = require 'nock'
 fs     = require 'fs'
-logic  = require '../lib/logic'
 
 Factory      = require 'factory-lady'
 Event        = require './factories/jobs/event'
@@ -19,11 +21,7 @@ describe 'Event.new()', ->
 
   logic.execute()
 
-  beforeEach ->
-    Factory.create 'user', (doc) -> user = doc
-    Factory.create 'user', (doc) -> another_user = doc
-    Factory.create 'application', (doc) -> application = doc
-    Factory.create 'application', (doc) -> another_application = doc
+  #beforeEach ->
 
 
   describe 'when the event matches the subscription and there is a valid access token', ->
@@ -31,17 +29,19 @@ describe 'Event.new()', ->
     beforeEach -> callback = nock('http://www.google.com').get('/').reply(200)
 
     beforeEach ->
-      setTimeout ( ->
-        Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
-        Factory.create 'subscription', { client_id: application.id }, (doc) ->
-        Factory.create 'event',        { resource_owner_id: user._id }, (doc) -> event = doc
-      ), time # needed delay to have valid user and app
+      async.series [
+        (c) -> Factory.create 'user', (doc) -> user = doc; c(),
+        (c) -> Factory.create 'application', (doc) -> application = doc; c(),
+        (c) -> Factory.create('access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->); c(),
+        (c) -> Factory.create('subscription', { client_id: application.id }, (doc) ->); c(),
+        (c) -> Factory.create('event', { resource_owner_id: user._id }, (doc) -> event = doc); c()
+      ]
 
     it 'makes an HTTP request to the subscription URI callback', (done) ->
-      setTimeout ( -> expect(callback.isDone()).toBe(true); done() ), time*2
+      setTimeout ( -> expect(callback.isDone()).toBe(true); done() ), 1000
 
-    it 'sets the :callback_processed field as processed', (done) ->
-      setTimeout ( -> expect(event.callback_processed).toBe(true); done() ), time*2
+    #it 'sets the :callback_processed field as processed', (done) ->
+      #setTimeout ( -> expect(event.callback_processed).toBe(true); done() ), time*2
 
 
   #describe 'when the event matches more than one subscription', ->

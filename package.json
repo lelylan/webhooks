@@ -13,7 +13,8 @@
     "request": "~2.11.4",
     "database-cleaner": "~0.7.0",
     "factory-lady": "~0.1.0",
-    "foreman": "0.0.8"
+    "foreman": "0.0.8",
+    "async": "~0.1.22"
   },
   "engines": {
     "node": "~0.8.x",
