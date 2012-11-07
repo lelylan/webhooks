@@ -1,3 +1,5 @@
+# $ node node_modules/jasmine-node/lib/jasmine-node/cli.js --autotest --coffee spec/
+
 nock   = require 'nock'
 fs     = require 'fs'
 helper = require './helper'
@@ -16,12 +18,15 @@ describe 'Event.new()', ->
 
   user    = another_user = application = another_application = token = event = sub = callback = undefined;
   fixture = __dirname + '/fixtures/event.json'
-  factory_time = 150
-  process_time = 300
+  factory_time = 200
+  process_time = 400
 
 
   # Listen to the new events in the queue
   logic.execute()
+
+  # Remove previous records from the DB
+  beforeEach -> helper.cleanDB
 
   # Create shared factories
   beforeEach ->
