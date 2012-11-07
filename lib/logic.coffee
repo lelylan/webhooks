@@ -71,6 +71,9 @@ findTokens = (event, attempts = 0) ->
       if attempts < process.env.MAX_ATTEMPTS
         #console.log('WARNING: The event', event.id, 'will be processed again in', (Math.pow 3, attempts), 'sec')
         setTimeout ( -> findTokens event, attempts + 1 ), (Math.pow 3, attempts) * 1000
+      else
+        setCallbackProcessed()
+
 
     #
     # Set the callback_processed to true
