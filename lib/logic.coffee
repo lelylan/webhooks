@@ -85,5 +85,6 @@ findTokens = (event, attempts = 0) ->
     # Find the access token that belongs to the user (valid clients)
     AccessToken.where('resource_owner_id').equals(event.resource_owner_id)
                .where('revoked_at').equals(undefined)
+               .or([ { scopes: /resources/i }, { scopes: new RegExp(event.resource,'i') } ])
                .exec(findSubscriptions)
   )(event)

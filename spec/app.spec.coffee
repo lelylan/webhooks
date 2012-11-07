@@ -111,7 +111,7 @@
       #setTimeout ( ->
         #Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
         #Factory.create 'subscription', { client_id: application.id }, (doc) ->
-        #Factory.create 'event',        { resource_owner_id: user._id, resource: 'device' }, (doc) ->
+        #Factory.create 'event',        { resource_owner_id: user._id, resource: 'locations' }, (doc) ->
           #setTimeout ( -> Event.findById doc.id, (err, doc) -> event = doc ), factory_time / 2 # refreshed callback_processed value
       #), factory_time # time needed to have valid user and application
 
