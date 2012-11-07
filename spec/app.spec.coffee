@@ -216,7 +216,7 @@ describe 'Event.new()', ->
 
     describe 'when succed making the last attempt', ->
 
-      it 'calls the service returning 200', (done) ->
+      it 'calls the service returning 200 OK (1 sec later)', (done) ->
         setTimeout ( ->
           expect(callback.isDone()).toBe(true);
           event.callback_processed = true; event.save(); done()
@@ -235,7 +235,7 @@ describe 'Event.new()', ->
       beforeEach -> failing_callback = nock('http://callback.com').post('/lelylan', json_device).reply(500)
       beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(500)
 
-      it 'calls the service returning 500', (done) ->
+      it 'calls the service returning 500 (1 sec later)', (done) ->
         setTimeout ( ->
           expect(callback.isDone()).toBe(true);
           event.callback_processed = true; event.save(); done()
