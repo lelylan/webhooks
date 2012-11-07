@@ -54,22 +54,28 @@ findTokens = (event, attempts = 0) ->
     # Makes the real HTTP request
     sendCallback = (subscription) ->
       options = { uri: subscription.callback_uri, method: 'POST', json: event.body }
+
       request options, (err, response, body) ->
         console.log 'ERROR', err.message if err
-        setCallbackProcessed()   if response.statusCode in [200..299]
-        scheduleFailedCallback() if response.statusCode in [300..599]
+        if (response.statusCode >= 200 && response.statusCode <= 299)
+          console.log "nooo", "200..299"
+          setCallbackProcessed()
+        else
+          console.log "siii", "300..599"
+          scheduleFailedCallback()
 
 
     #
     # Schedule the failed HTTP request to the future
     scheduleFailedCallback = ->
       if attempts < process.env.MAX_ATTEMPTS
-        console.log('rescheduled')
+        console.log('rescheduled', process.env.MAX_ATTEMPTS)
         #setTimeout ( -> findTokens event, attempts + 1 ), (Math.pow 3, attempts) * 1000
 
     #
     # Set the callback_processed to true
     setCallbackProcessed = ->
+      console.log 'this should not be called'
       event.callback_processed = true; event.save()
 
     #

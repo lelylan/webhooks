@@ -185,7 +185,10 @@ describe 'Event.new()', ->
 
   describe 'when the callback does not get a 2xx response', ->
 
-    beforeEach -> callback = nock('http://callback.com').post('/lelylan', json_device).reply(500)
+    failing_callback = undefined
+
+    beforeEach -> failing_callback = nock('http://callback.com').post('/lelylan', json_device).reply(500)
+    #beforeEach -> callback         = nock('http://callback.com').post('/lelylan', json_device).reply(200)
 
     # Create the event and the related elements.
     beforeEach ->
@@ -193,13 +196,29 @@ describe 'Event.new()', ->
         Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
         Factory.create 'event',        { resource_owner_id: user._id }, (doc) ->
-          setTimeout ( -> Event.findById doc.id, (err, doc) -> event = doc ), factory_time / 2 # refreshed callback_processed value
+          setTimeout ( -> Event.findById doc.id, (err, doc) -> event = doc; console.log doc.callback_processed ), factory_time / 2 # refreshed callback_processed value
       ), factory_time # time needed to have valid user and application
 
-    it 'sets event#callback_processed field as processed', (done) ->
-      setTimeout ( ->
-        expect(event.callback_processed).toBe(false)
-        event.callback_processed = true;
-        event.save()
-        done()
-      ), process_time
+    describe 'when making the first HTTP request', ->
+
+      it 'calls the service returning 500', (done) ->
+        setTimeout ( ->
+          expect(failing_callback.isDone()).toBe(true);
+          event.callback_processed = true; event.save(); done()
+        ), process_time
+
+      it 'leaves the callback_processed field unprocessed', (done) ->
+        setTimeout ( ->
+          expect(event.callback_processed).toBe(false);
+          event.callback_processed = true; event.save(); done()
+        ), process_time
+
+    #describe 'when making the next attempt', ->
+      #it 'sets event#callback_processed field as processed', (done) ->
+      #setTimeout ( ->
+        #console.log event
+        #expect(failing_callback.isDone()).toBe(true)
+        #expect(callback.isDone()).toBe(false)
+        #done()
+      #), process_time
+
