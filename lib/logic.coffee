@@ -51,7 +51,6 @@ findTokens = (event) ->
         options = { uri: subscription.callback_uri, method: 'POST', json: event.body }
         request options, (error, response, body) -> setCallbackProcessed()
 
-
     #
     # Set the callback_processed to true
     setCallbackProcessed = ->
