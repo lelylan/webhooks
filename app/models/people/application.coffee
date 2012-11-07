@@ -1,5 +1,5 @@
 mongoose = require 'mongoose'
-db = mongoose.createConnection 'localhost', 'people_test'
+db = mongoose.createConnection process.env.MONGOLAB_JOBS_URL
 
 applicationSchema = new mongoose.Schema { }
 
