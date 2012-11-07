@@ -21,7 +21,7 @@ exports.execute = ->
 # In other words if a user has a valid access token to a specific app
 # and that app has a subscription that should call an HTTP callback, we
 # have to make it.
-findTokens = (event) ->
+findTokens = (event, attempts = 0) ->
 
   #
   # Set a closure to get the access of event between the callbacks
@@ -40,16 +40,32 @@ findTokens = (event) ->
                   .where('event').equals(event.event)
                   .exec(callServices);
 
+
     #
     # Call the callback URIs related to the subscriptions
     callServices = (err, subscriptions) ->
       console.log "ERROR", err.message if (err)
 
-      setCallbackProcessed() if subscriptions.length == 0
+      setCallbackProcessed()     if subscriptions.length == 0
+      sendCallback(subscription) for subscription in subscriptions
 
-      for subscription in subscriptions
-        options = { uri: subscription.callback_uri, method: 'POST', json: event.body }
-        request options, (error, response, body) -> setCallbackProcessed()
+
+    #
+    # Makes the real HTTP request
+    sendCallback = (subscription) ->
+      options = { uri: subscription.callback_uri, method: 'POST', json: event.body }
+      request options, (err, response, body) ->
+        console.log 'ERROR', err.message if err
+        setCallbackProcessed()   if response.statusCode in [200..299]
+        scheduleFailedCallback() if response.statusCode in [300..599]
+
+
+    #
+    # Schedule the failed HTTP request to the future
+    scheduleFailedCallback = ->
+      if attempts < process.env.MAX_ATTEMPTS
+        console.log('rescheduled')
+        #setTimeout ( -> findTokens event, attempts + 1 ), (Math.pow 3, attempts) * 1000
 
     #
     # Set the callback_processed to true
@@ -62,4 +78,3 @@ findTokens = (event) ->
                .where('revoked_at').equals(undefined)
                .exec(findSubscriptions)
   )(event)
-
