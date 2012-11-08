@@ -43,7 +43,8 @@ findTokens = (event, attempts = 0) ->
 
     # Send the callback for single subscription
     sendCallback = (subscription) ->
-      options = { uri: subscription.callback_uri, method: 'POST', json: event.data }
+      pp payload(event)
+      options = { uri: subscription.callback_uri, method: 'POST', json: payload(event) }
 
       request options, (err, response, body) ->
         console.log 'ERROR', err.message if err
@@ -57,6 +58,12 @@ findTokens = (event, attempts = 0) ->
         setTimeout ( -> findTokens event, attempts + 1 ), (Math.pow 3, attempts) * 1000
       else
         setCallbackProcessed()
+
+
+    # Create the payload to send to the subscribed service
+    payload = (event) ->
+      { resource: event.resource, event: event.event, data: event.data }
+      #{ event_id: event.id, resource: event.resource, event: event.event, data: event.data }
 
 
     # Set the callback_processed field to true

@@ -2,8 +2,12 @@
   "factory_time": 200,
   "process_time": 400,
   "json_device": {
-    "uri": "http://api.lelylan.com/devices/5003c60ed033a96b96000009",
-    "id": "5003c60ed033a96b96000009",
-    "name": "Closet dimmer"
+    "resource": "devices",
+    "event": "update",
+    "data": {
+      "uri": "http://api.lelylan.com/devices/5003c60ed033a96b96000009",
+      "id": "5003c60ed033a96b96000009",
+      "name": "Closet dimmer"
+    }
   }
 }

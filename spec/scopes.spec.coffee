@@ -1,6 +1,6 @@
 # $ foreman run node node_modules/jasmine-node/lib/jasmine-node/cli.js --autotest --coffee spec/scopes.spec.coffee
 
-settings = require('konphyg')(__dirname + '/../config/settings')('settings');
+settings = require('konphyg')(__dirname + '/../config/settings')('settings')
 fs       = require 'fs'
 mongoose = require 'mongoose'
 nock     = require 'nock'
