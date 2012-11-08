@@ -6,5 +6,6 @@ accessTokenSchema = new mongoose.Schema
   application: mongoose.Schema.Types.ObjectId
   revoked_at: Date
   scopes: String
+  device_ids: { type: Array, default: [] }
 
 module.exports = db.model 'AccessToken', accessTokenSchema
