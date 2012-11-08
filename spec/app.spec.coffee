@@ -2,6 +2,7 @@
 
 nock   = require 'nock'
 fs     = require 'fs'
+
 helper = require './helper'
 logic  = require '../lib/logic'
 

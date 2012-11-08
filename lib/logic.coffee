@@ -1,5 +1,6 @@
-request = require 'request'
-_       = require '../app/assets/javascripts/underscore-min'
+request  = require 'request'
+mongoose = require 'mongoose'
+_        = require '../app/assets/javascripts/underscore-min'
 
 Event        = require '../app/models/jobs/event'
 Subscription = require '../app/models/subscriptions/subscription'
@@ -90,7 +91,7 @@ findTokens = (event, attempts = 0) ->
         revoked_at: undefined,
         $and: [
             { $or: [{ scopes: /resources/i }, { scopes: new RegExp(event.resource,'i') }] },
-            { $or: [{ device_ids: { $size: 0 } }, { device_ids: event.body.id }] }
+            { $or: [{ device_ids: { $size: 0 } }, { device_ids: mongoose.Types.ObjectId(event.body.id) }] }
         ]
     }, findSubscriptions);
 

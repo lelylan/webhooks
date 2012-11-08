@@ -1,7 +1,9 @@
 # $ foreman run node node_modules/jasmine-node/lib/jasmine-node/cli.js --autotest --coffee spec/scopes.spec.coffee
 
-nock   = require 'nock'
-fs     = require 'fs'
+nock     = require 'nock'
+fs       = require 'fs'
+mongoose = require 'mongoose'
+
 helper = require './helper'
 logic  = require '../lib/logic'
 
@@ -16,7 +18,7 @@ require './factories/people/access_token'
 
 describe 'AccessToken', ->
 
-  user = application = event = callback = undefined;
+  user = application = event = callback = device_id = undefined;
   factory_time = 200
   process_time = 400
   json_device  =
@@ -90,9 +92,11 @@ describe 'AccessToken', ->
 
   describe 'when the access token filters the notified resource', ->
 
+    beforeEach -> device_id = mongoose.Types.ObjectId('5003c60ed033a96b96000009')
+
     beforeEach ->
       setTimeout ( ->
-        Factory.create 'access_token', { device_ids: ['5003c60ed033a96b96000009'], resource_owner_id: user.id, application: application.id }, (doc) ->
+        Factory.create 'access_token', { device_ids: [device_id], resource_owner_id: user.id, application: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
         Factory.create 'event',        { resource_owner_id: user._id }, (doc) ->
       ), factory_time
@@ -103,9 +107,11 @@ describe 'AccessToken', ->
 
   describe 'when the access token does not let the access to the notified resource', ->
 
+    beforeEach -> device_id = mongoose.Types.ObjectId('1111c11ed111a11b11111111')
+
     beforeEach ->
       setTimeout ( ->
-        Factory.create 'access_token', { device_ids: ['1111c11ed111a11b11111111'], resource_owner_id: user.id, application: application.id }, (doc) ->
+        Factory.create 'access_token', { device_ids: [device_id], resource_owner_id: user.id, application: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
         Factory.create 'event',        { resource_owner_id: user._id }, (doc) ->
       ), factory_time

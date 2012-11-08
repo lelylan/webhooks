@@ -1,4 +1,3 @@
-fs      = require 'fs'
 Factory = require 'factory-lady'
 Event   = require '../../../app/models/jobs/event'
 
