@@ -28,7 +28,7 @@ describe 'AccessToken', ->
   beforeEach ->
     helper.cleanDB()
     nock.cleanAll()
-    callback = nock('http://callback.com').post('/lelylan', settings.json_device).reply(200)
+    callback = nock('http://callback.com').filteringRequestBody( (path) -> '*' ).post('/lelylan', '*').reply(200)
 
   beforeEach ->
     Factory.create 'user', (doc) -> user = doc

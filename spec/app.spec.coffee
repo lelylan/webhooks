@@ -41,7 +41,7 @@ describe 'Event.new()', ->
 
   describe 'when the event matches the subscription and there is a valid access token', ->
 
-    beforeEach -> callback = nock('http://callback.com').post('/lelylan', settings.json_device).reply(200)
+    beforeEach -> callback = nock('http://callback.com').filteringRequestBody( (path) -> '*' ).post('/lelylan', '*').reply(200)
 
     beforeEach ->
       setTimeout ( ->
@@ -59,8 +59,8 @@ describe 'Event.new()', ->
 
   describe 'when the event matches more than one subscription', ->
 
-    beforeEach -> callback = nock('http://callback.com').post('/lelylan', settings.json_device).reply(200)
-                                                        .post('/lelylan', settings.json_device).reply(200)
+    beforeEach -> callback = nock('http://callback.com').filteringRequestBody( (path) -> '*' ).post('/lelylan', '*').reply(200)
+                                                        .filteringRequestBody( (path) -> '*' ).post('/lelylan', '*').reply(200)
 
     beforeEach ->
       setTimeout ( ->
@@ -80,7 +80,7 @@ describe 'Event.new()', ->
 
   describe 'when there are no subscriptions', ->
 
-    beforeEach -> callback = nock('http://callback.com').post('/lelylan', settings.json_device).reply(200)
+    beforeEach -> callback = nock('http://callback.com').filteringRequestBody( (path) -> '*' ).post('/lelylan', '*').reply(200)
 
     beforeEach ->
       setTimeout ( ->
@@ -97,7 +97,7 @@ describe 'Event.new()', ->
 
   describe 'when the event does not match the subscription because of the #resource field', ->
 
-    beforeEach -> callback = nock('http://callback.com').post('/lelylan', settings.json_device).reply(200)
+    beforeEach -> callback = nock('http://callback.com').filteringRequestBody( (path) -> '*' ).post('/lelylan', '*').reply(200)
 
     beforeEach ->
       setTimeout ( ->
@@ -115,7 +115,7 @@ describe 'Event.new()', ->
 
   describe 'when the event does not match the subscription because of the #event field', ->
 
-    beforeEach -> callback = nock('http://callback.com').post('/lelylan', settings.json_device).reply(200)
+    beforeEach -> callback = nock('http://callback.com').filteringRequestBody( (path) -> '*' ).post('/lelylan', '*').reply(200)
 
     beforeEach ->
       setTimeout ( ->
@@ -133,7 +133,7 @@ describe 'Event.new()', ->
 
   describe 'when the access token is blocked', ->
 
-    beforeEach -> callback = nock('http://callback.com').post('/lelylan', settings.json_device).reply(200)
+    beforeEach -> callback = nock('http://callback.com').filteringRequestBody( (path) -> '*' ).post('/lelylan', '*').reply(200)
 
     beforeEach ->
       setTimeout ( ->
@@ -152,7 +152,7 @@ describe 'Event.new()', ->
   describe 'when the resource owner did not subscribe to a third party app', ->
 
     beforeEach ->
-      callback = nock('http://callback.com').post('/lelylan', settings.json_device).reply(200)
+      callback = nock('http://callback.com').filteringRequestBody( (path) -> '*' ).post('/lelylan', '*').reply(200)
 
     beforeEach ->
       setTimeout ( ->
@@ -171,8 +171,8 @@ describe 'Event.new()', ->
 
   describe 'when the callback does not get a 2xx response', ->
 
-    beforeEach -> failing_callback = nock('http://callback.com').post('/lelylan', settings.json_device).reply(500)
-    beforeEach -> callback         = nock('http://callback.com').post('/lelylan', settings.json_device).reply(200)
+    beforeEach -> failing_callback = nock('http://callback.com').filteringRequestBody( (path) -> '*' ).post('/lelylan', '*').reply(500)
+    beforeEach -> callback         = nock('http://callback.com').filteringRequestBody( (path) -> '*' ).post('/lelylan', '*').reply(200)
 
     beforeEach ->
       setTimeout ( ->
@@ -202,8 +202,8 @@ describe 'Event.new()', ->
     describe 'when fails making the last attempt', ->
 
       beforeEach -> nock.cleanAll()
-      beforeEach -> failing_callback = nock('http://callback.com').post('/lelylan', settings.json_device).reply(500)
-      beforeEach -> callback         = nock('http://callback.com').post('/lelylan', settings.json_device).reply(500)
+      beforeEach -> failing_callback = nock('http://callback.com').filteringRequestBody( (path) -> '*' ).post('/lelylan', '*').reply(500)
+      beforeEach -> callback         = nock('http://callback.com').filteringRequestBody( (path) -> '*' ).post('/lelylan', '*').reply(500)
 
       it 'calls the service returning 500 (1 sec later)', (done) ->
         setTimeout ( -> expect(callback.isDone()).toBe(true); helper.clear(event); done() ), settings.process_time + 1000

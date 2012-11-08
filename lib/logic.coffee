@@ -62,8 +62,7 @@ findTokens = (event, attempts = 0) ->
 
     # Create the payload to send to the subscribed service
     payload = (event) ->
-      { resource: event.resource, event: event.event, data: event.data }
-      #{ event_id: event.id, resource: event.resource, event: event.event, data: event.data }
+      { id: event.id, resource: event.resource, event: event.event, data: event.data }
 
 
     # Set the callback_processed field to true
