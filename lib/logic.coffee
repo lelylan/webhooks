@@ -1,4 +1,5 @@
 request = require 'request'
+_       = require '../app/assets/javascripts/underscore-min'
 
 Event        = require '../app/models/jobs/event'
 Subscription = require '../app/models/subscriptions/subscription'
@@ -83,7 +84,19 @@ findTokens = (event, attempts = 0) ->
 
     #
     # Find the access token that belongs to the user (valid clients)
-    AccessToken.where('resource_owner_id').equals(event.resource_owner_id)
-               .where('revoked_at').equals(undefined)
-               .exec(findSubscriptions)
+    # See http://stackoverflow.com/questions/13279992/complex-mongodb-query-with-multiple-or/13280188
+    AccessToken.find({
+        resource_owner_id: event.resource_owner_id,
+        revoked_at: undefined,
+        $and: [
+            { $or: [{ scopes: /resources/i }, { scopes: new RegExp(event.resource,'i') }] },
+            { $or: [{ device_ids: { $size: 0 } }, { device_ids: event.body.id }] }
+        ]
+    }, findSubscriptions);
+
+    #AccessToken.where('resource_owner_id').equals(event.resource_owner_id)
+               #.where('revoked_at').equals(undefined)
+               #.or([ { scopes: /resources/i }, { scopes: new RegExp(event.resource,'i') } ])
+               #.or([ { device_ids: [] }, { device_ids: event.body.id } ])
+               #.exec(findSubscriptions)
   )(event)
