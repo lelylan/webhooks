@@ -8,7 +8,7 @@ Factory.define 'event', Event,
   resource: 'devices'
   event: 'update'
   resource_id: mongoose.Types.ObjectId '5003c60ed033a96b96000009'
-  body:
+  data:
     name: 'Closet dimmer'
     id:   '5003c60ed033a96b96000009'
     uri:  'http://api.lelylan.com/devices/5003c60ed033a96b96000009'

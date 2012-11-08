@@ -6,10 +6,10 @@ AccessToken  = require '../people/access_token'
 
 eventSchema = new mongoose.Schema
   resource_owner_id: mongoose.Schema.Types.ObjectId
-  body: mongoose.Schema.Types.Mixed
+  resource_id: mongoose.Schema.Types.ObjectId
   resource: String
   event: String
-  resource_id: mongoose.Schema.Types.ObjectId
+  data: mongoose.Schema.Types.Mixed
   callback_processed: { type: Boolean, default: false }
 
 

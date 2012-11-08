@@ -43,7 +43,7 @@ findTokens = (event, attempts = 0) ->
 
     # Send the callback for single subscription
     sendCallback = (subscription) ->
-      options = { uri: subscription.callback_uri, method: 'POST', json: event.body }
+      options = { uri: subscription.callback_uri, method: 'POST', json: event.data }
 
       request options, (err, response, body) ->
         console.log 'ERROR', err.message if err
