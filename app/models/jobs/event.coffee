@@ -9,6 +9,7 @@ eventSchema = new mongoose.Schema
   body: mongoose.Schema.Types.Mixed
   resource: String
   event: String
+  resource_id: mongoose.Schema.Types.ObjectId
   callback_processed: { type: Boolean, default: false }
 
 
@@ -32,7 +33,7 @@ eventSchema.methods.findAccessTokens = (callback) ->
       revoked_at: undefined,
       $and: [
         { $or: [{ scopes: /resources/i }, { scopes: new RegExp(this.resource,'i') }] },
-        { $or: [{ device_ids: { $size: 0 } }, { device_ids: mongoose.Types.ObjectId(this.body.id) }] }
+        { $or: [{ device_ids: { $size: 0 } }, { device_ids: this.resource_id }] }
       ]
     }, callback);
 

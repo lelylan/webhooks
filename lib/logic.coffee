@@ -1,6 +1,5 @@
 request  = require 'request'
 mongoose = require 'mongoose'
-_        = require '../app/assets/javascripts/underscore-min'
 
 Event        = require '../app/models/jobs/event'
 Subscription = require '../app/models/subscriptions/subscription'
@@ -9,7 +8,6 @@ Application  = require '../app/models/people/application'
 AccessToken  = require '../app/models/people/access_token'
 
 
-#
 # Connect to the capped collection where events are inserted and call the
 # findToken() function when a new event is added.
 exports.execute = ->
@@ -17,7 +15,6 @@ exports.execute = ->
   .tailable().stream().on('data', (collection) -> findTokens collection)
 
 
-#
 # Execute all HTTP callbacks related to events created from users that
 # have subscribed to third party applications with some subscriptions.
 # In other words if a user has a valid access token to a specific app

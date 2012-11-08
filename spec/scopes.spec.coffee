@@ -89,7 +89,7 @@ describe 'AccessToken', ->
 
   describe 'when the access token filters the notified resource', ->
 
-    beforeEach -> device_id = mongoose.Types.ObjectId('5003c60ed033a96b96000009')
+    beforeEach -> device_id = mongoose.Types.ObjectId '5003c60ed033a96b96000009'
 
     beforeEach ->
       setTimeout ( ->
@@ -104,7 +104,7 @@ describe 'AccessToken', ->
 
   describe 'when the access token does not let the access to the notified resource', ->
 
-    beforeEach -> device_id = mongoose.Types.ObjectId('1111c11ed111a11b11111111')
+    beforeEach -> device_id = mongoose.Types.ObjectId '0000a00aa000a00a00000000'
 
     beforeEach ->
       setTimeout ( ->
