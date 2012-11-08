@@ -56,7 +56,7 @@ describe 'Event.new()', ->
 
     beforeEach ->
       setTimeout ( ->
-        Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
+        Factory.create 'access_token', { resource_owner_id: user.id, application_id: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
         Factory.create 'event',        { resource_owner_id: user._id }, (doc) -> getProcessedEvent(doc)
       ), factory_time
@@ -75,9 +75,9 @@ describe 'Event.new()', ->
 
     beforeEach ->
       setTimeout ( ->
-        Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
+        Factory.create 'access_token', { resource_owner_id: user.id, application_id: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
-        Factory.create 'access_token', { resource_owner_id: user.id, application: another_application.id }, (doc) ->
+        Factory.create 'access_token', { resource_owner_id: user.id, application_id: another_application.id }, (doc) ->
         Factory.create 'subscription', { client_id: another_application.id }, (doc) ->
         Factory.create 'event',        { resource_owner_id: user._id }, (doc) -> getProcessedEvent(doc)
       ), factory_time
@@ -95,7 +95,7 @@ describe 'Event.new()', ->
 
     beforeEach ->
       setTimeout ( ->
-        Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
+        Factory.create 'access_token', { resource_owner_id: user.id, application_id: application.id }, (doc) ->
         Factory.create 'event',        { resource_owner_id: user._id }, (doc) -> getProcessedEvent(doc)
       ), factory_time
 
@@ -112,7 +112,7 @@ describe 'Event.new()', ->
 
     beforeEach ->
       setTimeout ( ->
-        Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
+        Factory.create 'access_token', { resource_owner_id: user.id, application_id: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
         Factory.create 'event',        { resource_owner_id: user._id, resource: 'locations' }, (doc) -> getProcessedEvent(doc)
       ), factory_time
@@ -130,7 +130,7 @@ describe 'Event.new()', ->
 
     beforeEach ->
       setTimeout ( ->
-        Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
+        Factory.create 'access_token', { resource_owner_id: user.id, application_id: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
         Factory.create 'event',        { resource_owner_id: user._id, event: 'create' }, (doc) -> getProcessedEvent(doc)
       ), factory_time
@@ -148,7 +148,7 @@ describe 'Event.new()', ->
 
     beforeEach ->
       setTimeout ( ->
-        Factory.create 'access_token', { revoked_at: Date.now(), resource_owner_id: user.id, application: application.id }, (doc) ->
+        Factory.create 'access_token', { revoked_at: Date.now(), resource_owner_id: user.id, application_id: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
         Factory.create 'event',        { resource_owner_id: user._id }, (doc) -> getProcessedEvent(doc)
       ), factory_time
@@ -167,7 +167,7 @@ describe 'Event.new()', ->
 
     beforeEach ->
       setTimeout ( ->
-        Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
+        Factory.create 'access_token', { resource_owner_id: user.id, application_id: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
         Factory.create 'event', { resource_owner_id: another_user._id }, (doc) -> getProcessedEvent(doc)
       ), factory_time
@@ -187,7 +187,7 @@ describe 'Event.new()', ->
 
     beforeEach ->
       setTimeout ( ->
-        Factory.create 'access_token', { resource_owner_id: user.id, application: application.id }, (doc) ->
+        Factory.create 'access_token', { resource_owner_id: user.id, application_id: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
         Factory.create 'event',        { resource_owner_id: user._id }, (doc) ->  getProcessedEvent(doc)
       ), factory_time

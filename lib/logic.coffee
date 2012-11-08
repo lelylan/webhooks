@@ -35,7 +35,7 @@ findTokens = (event, attempts = 0) ->
       console.log "ERROR", err.message if (err)
 
       setCallbackProcessed() if tokens.length == 0
-      client_ids = tokens.map (token) -> token.application
+      client_ids = tokens.map (token) -> token.application_id
 
       Subscription.where('client_id').in(client_ids)
                   .where('resource').equals(event.resource)

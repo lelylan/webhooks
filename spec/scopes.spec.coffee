@@ -42,7 +42,7 @@ describe 'AccessToken', ->
 
     beforeEach ->
       setTimeout ( ->
-        Factory.create 'access_token', { scopes: 'resources-read', resource_owner_id: user.id, application: application.id }, (doc) ->
+        Factory.create 'access_token', { scopes: 'resources-read', resource_owner_id: user.id, application_id: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
         Factory.create 'event',        { resource_owner_id: user._id }, (doc) ->
       ), factory_time
@@ -55,7 +55,7 @@ describe 'AccessToken', ->
 
     beforeEach ->
       setTimeout ( ->
-        Factory.create 'access_token', { scopes: 'devices-read', resource_owner_id: user.id, application: application.id }, (doc) ->
+        Factory.create 'access_token', { scopes: 'devices-read', resource_owner_id: user.id, application_id: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
         Factory.create 'event',        { resource_owner_id: user._id }, (doc) ->
       ), factory_time
@@ -68,7 +68,7 @@ describe 'AccessToken', ->
 
     beforeEach ->
       setTimeout ( ->
-        Factory.create 'access_token', { scopes: 'location-read', resource_owner_id: user.id, application: application.id }, (doc) ->
+        Factory.create 'access_token', { scopes: 'location-read', resource_owner_id: user.id, application_id: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
         Factory.create 'event',        { resource_owner_id: user._id }, (doc) ->
       ), factory_time
@@ -81,7 +81,7 @@ describe 'AccessToken', ->
 
     beforeEach ->
       setTimeout ( ->
-        Factory.create 'access_token', { device_ids: [], resource_owner_id: user.id, application: application.id }, (doc) ->
+        Factory.create 'access_token', { device_ids: [], resource_owner_id: user.id, application_id: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
         Factory.create 'event',        { resource_owner_id: user._id }, (doc) ->
       ), factory_time
@@ -96,7 +96,7 @@ describe 'AccessToken', ->
 
     beforeEach ->
       setTimeout ( ->
-        Factory.create 'access_token', { device_ids: [device_id], resource_owner_id: user.id, application: application.id }, (doc) ->
+        Factory.create 'access_token', { device_ids: [device_id], resource_owner_id: user.id, application_id: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
         Factory.create 'event',        { resource_owner_id: user._id }, (doc) ->
       ), factory_time
@@ -111,7 +111,7 @@ describe 'AccessToken', ->
 
     beforeEach ->
       setTimeout ( ->
-        Factory.create 'access_token', { device_ids: [device_id], resource_owner_id: user.id, application: application.id }, (doc) ->
+        Factory.create 'access_token', { device_ids: [device_id], resource_owner_id: user.id, application_id: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
         Factory.create 'event',        { resource_owner_id: user._id }, (doc) ->
       ), factory_time
