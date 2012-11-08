@@ -94,9 +94,4 @@ findTokens = (event, attempts = 0) ->
         ]
     }, findSubscriptions);
 
-    #AccessToken.where('resource_owner_id').equals(event.resource_owner_id)
-               #.where('revoked_at').equals(undefined)
-               #.or([ { scopes: /resources/i }, { scopes: new RegExp(event.resource,'i') } ])
-               #.or([ { device_ids: [] }, { device_ids: event.body.id } ])
-               #.exec(findSubscriptions)
   )(event)
