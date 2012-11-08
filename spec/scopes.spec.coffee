@@ -16,17 +16,9 @@ require './factories/people/access_token'
 
 describe 'AccessToken', ->
 
-  # shared variables
   user = application = event = callback = undefined;
-  # Time needed to create a factory
   factory_time = 200
-  # Time needed to create factories and let the app process the event
   process_time = 400
-  # json device structure for event
-  json_device  =
-    uri:  'http://api.lelylan.com/devices/5003c60ed033a96b96000009'
-    id:   '5003c60ed033a96b96000009'
-    name: 'Closet dimmer'
 
   logic.execute()
 
