@@ -19,7 +19,6 @@ exports.cleanDB = ->
   Application.find().remove()
   # Event.find().remove() # We can not delete records in a capped collection
 
-# Get back the event representation after being processed. This function
-# stores in event the last updated event version.
-exports.processedEvent = (doc, event) ->
-  setTimeout ( -> Event.findById doc.id, (err, doc) -> event = doc ), factory_time / 2
+# Set the event :callback_processed field to true
+exports.clear = (event) ->
+  event.callback_processed = true; event.save();

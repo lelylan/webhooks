@@ -19,6 +19,10 @@ describe 'AccessToken', ->
   user = application = event = callback = undefined;
   factory_time = 200
   process_time = 400
+  json_device  =
+    uri:  'http://api.lelylan.com/devices/5003c60ed033a96b96000009'
+    id:   '5003c60ed033a96b96000009'
+    name: 'Closet dimmer'
 
   logic.execute()
 
@@ -64,7 +68,7 @@ describe 'AccessToken', ->
       setTimeout ( ->
         Factory.create 'access_token', { scopes: 'location-read', resource_owner_id: user.id, application: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
-        Factory.create 'event',        { resource_owner_id: user._id }, (doc) -> helper.processedEvent(doc, event)
+        Factory.create 'event',        { resource_owner_id: user._id }, (doc) ->
       ), factory_time
 
     it 'makes an HTTP request to the subscription URI callback', (done) ->
@@ -103,7 +107,7 @@ describe 'AccessToken', ->
       setTimeout ( ->
         Factory.create 'access_token', { device_ids: ['1111c11ed111a11b11111111'], resource_owner_id: user.id, application: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
-        Factory.create 'event',        { resource_owner_id: user._id }, (doc) -> helper.processedEvent(doc, event)
+        Factory.create 'event',        { resource_owner_id: user._id }, (doc) ->
       ), factory_time
 
     it 'makes an HTTP request to the subscription URI callback', (done) ->
