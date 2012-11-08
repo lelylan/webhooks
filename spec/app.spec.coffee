@@ -16,7 +16,6 @@ require './factories/people/user'
 require './factories/people/application'
 require './factories/people/access_token'
 
-
 # Global variables
 user = another_user = application = another_application = token = event = sub = callback = failing_callback = undefined;
 

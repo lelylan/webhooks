@@ -25,74 +25,49 @@ exports.execute = ->
 # have to make it.
 findTokens = (event, attempts = 0) ->
 
-  #
   # Set a closure to get the access of event between the callbacks
   ( (event) ->
 
-    #
-    # Find the subscriptions related to the token's clients
+    # Find the subscriptions related to the resource owner active tokens
     findSubscriptions = (err, tokens) ->
       console.log "ERROR", err.message if (err)
 
       setCallbackProcessed() if tokens.length == 0
-      client_ids = tokens.map (token) -> token.application_id
-
-      Subscription.where('client_id').in(client_ids)
-                  .where('resource').equals(event.resource)
-                  .where('event').equals(event.event)
-                  .exec(callServices);
+      event.findSubscriptions(tokens, fireCallbacks) if tokens.length != 0
 
 
-    #
-    # Call the callback URIs related to the subscriptions
-    callServices = (err, subscriptions) ->
+    # Organize the subscriptions callbacks
+    fireCallbacks = (err, subscriptions) ->
       console.log "ERROR", err.message if (err)
 
       setCallbackProcessed()     if subscriptions.length == 0
       sendCallback(subscription) for subscription in subscriptions
 
 
-    #
-    # Makes the real HTTP request
+    # Send the callback for single subscription
     sendCallback = (subscription) ->
       options = { uri: subscription.callback_uri, method: 'POST', json: event.body }
 
       request options, (err, response, body) ->
         console.log 'ERROR', err.message if err
-        if (response.statusCode >= 200 && response.statusCode <= 299)
-          #console.log "calling 200..299"
-          setCallbackProcessed()
-        else
-          #console.log "calling 300..599"
-          scheduleFailedCallback()
+        setCallbackProcessed()   if (response.statusCode >= 200 && response.statusCode <= 299)
+        scheduleFailedCallback() if (response.statusCode >= 300 && response.statusCode <= 599)
 
 
-    #
     # Schedule the failed HTTP request to the future
     scheduleFailedCallback = ->
       if attempts < process.env.MAX_ATTEMPTS
-        #console.log('WARNING: The event', event.id, 'will be processed again in', (Math.pow 3, attempts), 'sec')
         setTimeout ( -> findTokens event, attempts + 1 ), (Math.pow 3, attempts) * 1000
       else
         setCallbackProcessed()
 
 
-    #
-    # Set the callback_processed to true
+    # Set the callback_processed field to true
     setCallbackProcessed = ->
-      #console.log 'INFO: The event', event.id, 'has been processed'
       event.callback_processed = true; event.save()
 
-    #
+    # EVERYTHING STARTS HERE ->
     # Find the access token that belongs to the user (valid clients)
-    # See http://stackoverflow.com/questions/13279992/complex-mongodb-query-with-multiple-or/13280188
-    AccessToken.find({
-        resource_owner_id: event.resource_owner_id,
-        revoked_at: undefined,
-        $and: [
-            { $or: [{ scopes: /resources/i }, { scopes: new RegExp(event.resource,'i') }] },
-            { $or: [{ device_ids: { $size: 0 } }, { device_ids: mongoose.Types.ObjectId(event.body.id) }] }
-        ]
-    }, findSubscriptions);
+    event.findAccessTokens(findSubscriptions)
 
   )(event)

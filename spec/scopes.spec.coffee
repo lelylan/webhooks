@@ -17,9 +17,11 @@ require './factories/people/user'
 require './factories/people/application'
 require './factories/people/access_token'
 
-describe 'AccessToken', ->
+# Global variables
+user = application = event = callback = device_id = undefined;
 
-  user = application = event = callback = device_id = undefined;
+
+describe 'AccessToken', ->
 
   logic.execute()
 
