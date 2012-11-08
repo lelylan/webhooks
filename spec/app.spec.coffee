@@ -1,4 +1,4 @@
-# $ foreman run node node_modules/jasmine-node/lib/jasmine-node/cli.js --autotest --coffee spec/
+# $ foreman run node node_modules/jasmine-node/lib/jasmine-node/cli.js --autotest --coffee spec/app.spec.coffee
 
 nock   = require 'nock'
 fs     = require 'fs'
