@@ -1,5 +1,6 @@
 request  = require 'request'
 mongoose = require 'mongoose'
+crypto   = require 'crypto'
 
 Event        = require '../app/models/jobs/event'
 Subscription = require '../app/models/subscriptions/subscription'
@@ -43,8 +44,7 @@ findTokens = (event, attempts = 0) ->
 
     # Send the callback for single subscription
     sendCallback = (subscription) ->
-      pp payload(event)
-      options = { uri: subscription.callback_uri, method: 'POST', json: payload(event) }
+      options = { uri: subscription.callback_uri, method: 'POST', headers: getHeaders(event), json: payload(event) }
 
       request options, (err, response, body) ->
         console.log 'ERROR', err.message if err
@@ -63,6 +63,14 @@ findTokens = (event, attempts = 0) ->
     # Create the payload to send to the subscribed service
     payload = (event) ->
       { id: event.id, resource: event.resource, event: event.event, data: event.data }
+
+
+    # Create the headers to send to the subscribed service
+    getHeaders = (event) ->
+      shasum  = crypto.createHmac("sha1", 'secret_key');
+      content = payload(event)
+      shasum.update JSON.stringify(content)
+      { 'X-Hub-Signature': shasum.digest('hex'), 'accept': 'application/json' }
 
 
     # Set the callback_processed field to true
