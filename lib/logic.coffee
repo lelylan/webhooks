@@ -39,7 +39,14 @@ findTokens = (event, attempts = 0) ->
       console.log "ERROR", err.message if (err)
 
       setCallbackProcessed()     if subscriptions.length == 0
-      sendCallback(subscription) for subscription in subscriptions
+      findClient(subscription)   for subscription in subscriptions
+
+
+    # Find the application secret (needed for the 'X-Hub-Signature')
+    findClient = (subscription) ->
+      Application.findById subscription.client_id, (err, doc) ->
+        event.client = doc
+        sendCallback subscription
 
 
     # Send the callback for single subscription
@@ -67,7 +74,7 @@ findTokens = (event, attempts = 0) ->
 
     # Create the headers to send to the subscribed service
     getHeaders = (event) ->
-      shasum  = crypto.createHmac("sha1", 'secret_key');
+      shasum  = crypto.createHmac("sha1", event.client.secret);
       content = payload(event)
       shasum.update JSON.stringify(content)
       { 'X-Hub-Signature': shasum.digest('hex'), 'accept': 'application/json' }
