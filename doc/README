@@ -24,7 +24,8 @@ Which stays for
 
 $ foreman run node node_modules/jasmine-node/lib/jasmine-node/cli.js --autotest --coffee spec/app.spec.coffee
 
-Debugging mode
+
+Debug
 
 If you want to get some useful messages on production just set the Debug env variable
 
