@@ -16,7 +16,7 @@ eventSchema = new mongoose.Schema
 # Find the subscriptions related to the resource owner active tokens.
 eventSchema.methods.findSubscriptions = (tokens, callback) ->
 
-  console.log 'DEBUG: searching for subscriptions' if process.env.NODE_ENV=='development'
+  console.log 'DEBUG: searching for subscriptions' if process.env.DEBUG
 
   client_ids = tokens.map (token) -> token.application_id
 
@@ -30,7 +30,7 @@ eventSchema.methods.findSubscriptions = (tokens, callback) ->
 # See http://stackoverflow.com/questions/13279992/complex-mongodb-query-with-multiple-or/13280188
 eventSchema.methods.findAccessTokens = (callback) ->
 
-  console.log 'DEBUG: searching for tokens' if process.env.NODE_ENV=='development'
+  console.log 'DEBUG: searching for tokens' if process.env.DEBUG
 
   AccessToken.find({
       resource_owner_id: this.resource_owner_id,

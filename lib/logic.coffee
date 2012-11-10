@@ -29,7 +29,7 @@ findTokens = (event, attempts = 0) ->
     # Find the subscriptions related to the resource owner active tokens
     findSubscriptions = (err, tokens) ->
       console.log "ERROR", err.message if (err)
-      console.log 'DEBUG: access tokens found', tokens.length if process.env.NODE_ENV=='development'
+      console.log 'DEBUG: access tokens found', tokens.length if process.env.DEBUG
 
       setCallbackProcessed() if tokens.length == 0
       event.findSubscriptions(tokens, fireCallbacks) if tokens.length != 0
@@ -38,7 +38,7 @@ findTokens = (event, attempts = 0) ->
     # Organize the subscriptions callbacks
     fireCallbacks = (err, subscriptions) ->
       console.log "ERROR", err.message if (err)
-      console.log 'DEBUG: subscriptions found', subscriptions.length if process.env.NODE_ENV=='development'
+      console.log 'DEBUG: subscriptions found', subscriptions.length if process.env.DEBUG
 
       setCallbackProcessed()     if subscriptions.length == 0
       findClient(subscription)   for subscription in subscriptions
@@ -46,11 +46,11 @@ findTokens = (event, attempts = 0) ->
 
     # Find the application secret (needed for the 'X-Hub-Signature')
     findClient = (subscription) ->
-      console.log 'DEBUG: searching for client' if process.env.NODE_ENV=='development'
+      console.log 'DEBUG: searching for client' if process.env.DEBUG
 
       Application.findById subscription.client_id, (err, doc) ->
         console.log "ERROR", err.message if (err)
-        console.log 'DEBUG: client found with id', doc.id if process.env.NODE_ENV=='development'
+        console.log 'DEBUG: client found with id', doc.id if process.env.DEBUG
 
         event.client = doc
         sendCallback subscription
@@ -61,7 +61,7 @@ findTokens = (event, attempts = 0) ->
       options = { uri: subscription.callback_uri, method: 'POST', headers: getHeaders(event), json: payload(event) }
 
       request options, (err, response, body) ->
-        console.log 'DEBUG: webhook sent to', subscription.callback_uri if process.env.NODE_ENV=='development'
+        console.log 'DEBUG: webhook sent to', subscription.callback_uri if process.env.DEBUG
         if err
           console.log 'ERROR', err.message
         else
@@ -71,7 +71,7 @@ findTokens = (event, attempts = 0) ->
 
     # Schedule the failed HTTP request to the future
     scheduleFailedCallback = ->
-      console.log 'DEBUG: webhook failed to', subscription.callback_uri if process.env.NODE_ENV=='development'
+      console.log 'DEBUG: webhook failed to', subscription.callback_uri if process.env.DEBUG
       if attempts < process.env.MAX_ATTEMPTS
         setTimeout ( -> findTokens event, attempts + 1 ), (Math.pow 3, attempts) * 1000
       else

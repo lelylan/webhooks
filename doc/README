@@ -18,4 +18,9 @@ just one spec per time. At the moment this is acceptable as we have few
 tests, but when they grow we'll have to find a solution for this problem
 and also have a working continuous testing system.
 
+$ gnode spec/app.spec.coffee
+
+which stays for
+
 $ foreman run node node_modules/jasmine-node/lib/jasmine-node/cli.js --autotest --coffee spec/app.spec.coffee
+
