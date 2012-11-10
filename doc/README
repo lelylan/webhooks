@@ -1,3 +1,12 @@
+Deploy
+
+The deploy is quite the same, but be careful to check that the worker is up and running
+with the command 'heroku ps' or by checking your dashboard.
+
+git push heroku master
+heroku ps:scale worker=1
+
+
 Organization
 
 lib/logic.coffee This is the file where all the logic is grouped (together with
@@ -31,3 +40,4 @@ If you want to get some useful messages on production just set the Debug env var
 
   heroku config:set DEBUG=true
   heroku config:remove DEBUG
+
