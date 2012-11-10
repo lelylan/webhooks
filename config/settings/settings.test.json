@@ -10,5 +10,6 @@
       "id": "5003c60ed033a96b96000009",
       "name": "Closet dimmer"
     }
-  }
+  },
+  "max_attempts": 1
 }
