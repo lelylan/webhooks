@@ -97,7 +97,7 @@ findTokens = (event, attempts = 0) ->
 
     # EVERYTHING STARTS HERE ->
     # Find the access token that belongs to the user (valid clients)
-    console.log 'DEBUG: processing event', event.id if process.env.NODE_ENV=='development'
+    console.log 'DEBUG: processing event', event.id if process.env.DEBUG
     event.findAccessTokens(findSubscriptions)
 
   )(event)
