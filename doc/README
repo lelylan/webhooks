@@ -20,7 +20,13 @@ and also have a working continuous testing system.
 
 $ gnode spec/app.spec.coffee
 
-which stays for
+Which stays for
 
 $ foreman run node node_modules/jasmine-node/lib/jasmine-node/cli.js --autotest --coffee spec/app.spec.coffee
 
+Debugging mode
+
+If you want to get some useful messages on production just set the Debug env variable
+
+  heroku config:set DEBUG=true
+  heroku config:remove DEBUG
