@@ -1,7 +1,7 @@
 mongoose = require 'mongoose'
-db = mongoose.createConnection process.env.MONGOLAB_JOBS_URL
+db = mongoose.createConnection process.env.MONGOLAB_PEOPLE_URL
 
 applicationSchema = new mongoose.Schema
   secret: String
 
-module.exports = db.model 'Application', applicationSchema
+module.exports = db.model 'oauth_application', applicationSchema

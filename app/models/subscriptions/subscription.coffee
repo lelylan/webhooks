@@ -7,4 +7,4 @@ subscriptionSchema = new mongoose.Schema
   event: String
   callback_uri: String
 
-module.exports = db.model 'Subscription', subscriptionSchema
+module.exports = db.model 'subscription', subscriptionSchema

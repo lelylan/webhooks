@@ -1,5 +1,5 @@
 mongoose = require 'mongoose'
-db = mongoose.createConnection process.env.MONGOLAB_JOBS_URL
+db = mongoose.createConnection process.env.MONGOLAB_PEOPLE_URL
 
 accessTokenSchema = new mongoose.Schema
   resource_owner_id: mongoose.Schema.Types.ObjectId
@@ -8,4 +8,4 @@ accessTokenSchema = new mongoose.Schema
   scopes: String
   device_ids: { type: Array, default: [] }
 
-module.exports = db.model 'AccessToken', accessTokenSchema
+module.exports = db.model 'oauth_access_token', accessTokenSchema
