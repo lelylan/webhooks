@@ -83,7 +83,7 @@ findTokens = (event, attempts = 0) ->
 
     # Create the payload to send to the subscribed service
     payload = (event) ->
-      { id: event.id, resource: event.resource, event: event.event, nonce: uuid.v4(), data: event.data }
+      { id: event.id, nonce: uuid.v4(), resource: event.resource, event: event.event, source: event.source, data: event.data }
 
 
     # Create the headers to send to the subscribed service

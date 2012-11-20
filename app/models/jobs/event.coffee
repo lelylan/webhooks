@@ -9,6 +9,7 @@ eventSchema = new mongoose.Schema
   resource_id: mongoose.Schema.Types.ObjectId
   resource: String
   event: String
+  source: String
   data: mongoose.Schema.Types.Mixed
   callback_processed: { type: Boolean, default: false }
 
