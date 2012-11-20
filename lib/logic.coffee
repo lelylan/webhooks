@@ -3,6 +3,7 @@ settings = require('konphyg')(__dirname + '/../config/settings')('settings')
 request  = require 'request'
 mongoose = require 'mongoose'
 crypto   = require 'crypto'
+uuid     = require 'node-uuid'
 
 Event        = require '../app/models/jobs/event'
 Subscription = require '../app/models/subscriptions/subscription'
@@ -82,7 +83,7 @@ findTokens = (event, attempts = 0) ->
 
     # Create the payload to send to the subscribed service
     payload = (event) ->
-      { id: event.id, resource: event.resource, event: event.event, data: event.data }
+      { id: event.id, resource: event.resource, event: event.event, nonce: uuid.v4(), data: event.data }
 
 
     # Create the headers to send to the subscribed service

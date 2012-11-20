@@ -15,7 +15,8 @@
     "factory-lady": "~0.1.0",
     "foreman": "0.0.8",
     "async": "~0.1.22",
-    "konphyg": "~1.2.0"
+    "konphyg": "~1.2.0",
+    "node-uuid": "~1.4.0"
   },
   "engines": {
     "node": "~0.8.x",

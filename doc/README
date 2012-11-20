@@ -36,6 +36,7 @@ Which stays for
 
 $ foreman run -e .test.env node node_modules/jasmine-node/lib/jasmine-node/cli.js --autotest --coffee spec/app.spec.coffee
 
+If the first time it does not work, just try once more and it should work out.
 
 
 Debug
