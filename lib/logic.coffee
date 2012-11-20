@@ -83,7 +83,7 @@ findTokens = (event, attempts = 0) ->
 
     # Create the payload to send to the subscribed service
     payload = (event) ->
-      { id: event.id, nonce: uuid.v4(), resource: event.resource, event: event.event, source: event.source, data: event.data }
+      { nonce: uuid.v4(), resource: event.resource, event: event.event, source: event.source, data: event.data }
 
 
     # Create the headers to send to the subscribed service
@@ -100,7 +100,7 @@ findTokens = (event, attempts = 0) ->
 
     # EVERYTHING STARTS HERE ->
     # Find the access token that belongs to the user (valid clients)
-    console.log 'DEBUG: processing event', event.id if process.env.DEBUG
+    console.log 'DEBUG: processing event related to resource', event.resource_id if process.env.DEBUG
     event.findAccessTokens(findSubscriptions)
 
   )(event)
