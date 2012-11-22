@@ -1,16 +1,16 @@
-# Lelylan Subscriptions Emitter API
+# Webhooks Dispatcher
 
-Subscriptions Emitter API for [Lelylan](http://dev.lelylan.com/api/realtime)
+Webhooks dispatcher for [Lelylan](http://dev.lelylan.com/api/realtime)
 
 ## Requirements
 
-People API proxy is tested against Node 0.8.8.
+Webhooks dispatcher is tested against Node 0.8.8.
 
 ## Installation
 
 Clone the repository.
 
-    git clone git@github.com:lelylan/api.git
+    git clone git@github.com:lelylan/webhooks.git
 
 Run Node server
 
@@ -34,12 +34,12 @@ Follow [github](https://github.com/styleguide/) guidelines.
 
 ## Feedback
 
-Use the [issue tracker](http://github.com/lelylan/subscriptions-js/issues) for bugs.
+Use the [issue tracker](http://github.com/lelylan/webhooks/issues) for bugs.
 [Mail](mailto:touch@lelylan.com) or [Tweet](http://twitter.com/lelylan) us for any idea that can improve the project.
 
 ## Links
 
-* [GIT Repository](http://github.com/lelylan/subscriptions-js)
+* [GIT Repository](http://github.com/lelylan/webhooks)
 * [Lelylan Realtime API](http://dev.lelylan.com/api/realtime)
 * [Lelylan Dev Center](http://dev.lelylan.com)
 * [Lelylan Site](http://lelylan.com)
@@ -54,9 +54,9 @@ Special thanks to the following people for submitting patches.
 
 ## Changelog
 
-See [CHANGELOG](subscriptions-js/blob/master/CHANGELOG.md)
+See [CHANGELOG](webhooks/blob/master/CHANGELOG.md)
 
 ## Copyright
 
-Copyright (c) 2013 [Lelylan](http://lelylan.com). See [LICENSE](api/blob/master/LICENSE.md) for details.
+Copyright (c) 2013 [Lelylan](http://lelylan.com). See [LICENSE](webhooks/blob/master/LICENSE.md) for details.
 
