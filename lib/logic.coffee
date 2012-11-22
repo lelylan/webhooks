@@ -91,7 +91,7 @@ findTokens = (event, attempts = 0) ->
       shasum  = crypto.createHmac("sha1", event.client.secret);
       content = payload(event)
       shasum.update JSON.stringify(content)
-      { 'X-Hub-Signature': shasum.digest('hex'), 'accept': 'application/json' }
+      { 'X-Hub-Signature': shasum.digest('hex'), 'Content-Type': 'application/json' }
 
 
     # Set the callback_processed field to true
