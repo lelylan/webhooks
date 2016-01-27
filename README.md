@@ -1,62 +1,73 @@
-# Webhooks Dispatcher
+# Webhooks
 
-Webhooks dispatcher for [Lelylan](http://dev.lelylan.com/api/realtime)
+Webhooks dispatcher to enable third party updates with Lelyan.
+
 
 ## Requirements
 
-Webhooks dispatcher is tested against Node 0.8.8.
+Webhooks is tested against Node 0.8.8.
+
 
 ## Installation
 
-Clone the repository.
+    $ mongod
+    $ git clone git@github.com:lelylan/webhooks.git
+    $ npm install && npm install -g foreman
+    $ nf start
 
-    git clone git@github.com:lelylan/webhooks.git
-
-Run Node server
-
-    foreman start
-
-## Deploay
-
-Follow [Node.js on Heroku](https://devcenter.heroku.com/articles/nodejs).
 
 ## Resources
 
-* [Lelylan Realtime API](http://dev.lelylan.com/api/realtime)
+* [Lelylan Realtime Docs](http://dev.lelylan.com/developers#realtime-api) 
+
 
 ## Contributing
 
 Fork the repo on github and send a pull requests with topic branches.
+Do not forget to provide specs to your contribution.
+
+
+### Running specs
+
+* Fork and clone the repository
+* Run `npm install`
+* Run `npm test`
+
 
 ## Coding guidelines
 
-Follow [github](https://github.com/styleguide/) guidelines.
+Follow [Felix](http://nodeguide.com/style.html) guidelines.
+
 
 ## Feedback
 
-Use the [issue tracker](http://github.com/lelylan/webhooks/issues) for bugs.
-[Mail](mailto:touch@lelylan.com) or [Tweet](http://twitter.com/lelylan) us for any idea that can improve the project.
+Use the [issue tracker](http://github.com/lelylan/webhooks/issues) for bugs or [stack  overflow](http://stackoverflow.com/questions/tagged/lelylan) for questions.
+[Mail](mailto:dev@lelylan.com) or [Tweet](http://twitter.com/lelylan) us for any idea that can improve the project.
+
 
 ## Links
 
 * [GIT Repository](http://github.com/lelylan/webhooks)
-* [Lelylan Realtime API](http://dev.lelylan.com/api/realtime)
 * [Lelylan Dev Center](http://dev.lelylan.com)
 * [Lelylan Site](http://lelylan.com)
 
+
 ## Authors
 
-[Andrea Reginato](http://twitter.com/andreareginato)
+[Andrea Reginato](https://www.linkedin.com/in/andreareginato)
+
 
 ## Contributors
 
-Special thanks to the following people for submitting patches.
+Special thanks to all [contributors](https://github.com/lelylan/webhooks/contributors)
+for submitting patches.
+
 
 ## Changelog
 
-See [CHANGELOG](webhooks/blob/master/CHANGELOG.md)
+See [CHANGELOG](https://github.com/lelylan/webhooks/blob/master/CHANGELOG.md)
 
-## Copyright
 
-Copyright (c) 2013 [Lelylan](http://lelylan.com). See [LICENSE](webhooks/blob/master/LICENSE.md) for details.
+## License
 
+Lelylan is licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
