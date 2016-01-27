@@ -2,4 +2,4 @@
 
 ## v0.1.0 (2016.01.01)
 
-First version Lelylan Subscriptions JS
+First version Lelylan Webhooks
