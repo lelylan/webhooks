@@ -1,17 +1,15 @@
 # Webhooks
 
-Webhooks dispatcher to enable third party updates with Lelyan.
-
+Realtime HTTP notification from Lelylan to third party apps
 
 ## Requirements
 
-Webhooks is tested against Node 0.8.8.
+Webhooks is tested against Node 0.10.36.
 
 
 ## Installation
 
-    $ mongod
-    $ git clone git@github.com:lelylan/webhooks.git
+    $ git clone git@github.com:lelylan/webhooks.git && cd webhooks
     $ npm install && npm install -g foreman
     $ nf start
 
@@ -29,9 +27,8 @@ Do not forget to provide specs to your contribution.
 
 ### Running specs
 
-* Fork and clone the repository
-* Run `npm install`
-* Run `npm test`
+    $ npm install
+    $ npm test
 
 
 ## Coding guidelines
