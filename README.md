@@ -18,7 +18,7 @@ When installing the service in production set [lelylan environment variables](ht
 
 ## Resources
 
-* [Lelylan Realtime Docs](http://dev.lelylan.com/developers#realtime-api) 
+* [Lelylan Realtime API](http://dev.lelylan.com/api#api-realtime) 
 
 
 ## Contributing
