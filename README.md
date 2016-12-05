@@ -9,21 +9,36 @@ Webhooks is tested against Node 0.10.36.
 
 ## Installation
 
-    $ git clone git@github.com:lelylan/webhooks.git && cd webhooks
-    $ npm install && npm install -g foreman
-    $ nf start
+```bash
+$ git clone git@github.com:lelylan/webhooks.git && cd webhooks
+$ npm install && npm install -g foreman
+$ nf start
+```
 
 ## Install with docker
 
-    $ docker build --tag=webhooks .
-    $ docker run -d -it --name webhooks webhooks
-    
+#### Badges
+Docker image: [lelylanlab/webhooks](https://hub.docker.com/r/lelylanlab/webhooks/)
+
+[![](https://images.microbadger.com/badges/version/lelylanlab/webhooks:latest.svg)](http://microbadger.com/images/lelylanlab/webhooks:latest "Get your own version badge on microbadger.com")  [![](https://images.microbadger.com/badges/image/lelylanlab/webhooks:latest.svg)](http://microbadger.com/images/lelylanlab/webhooks:latest "Get your own image badge on microbadger.com")
+
+### Use docker hub image
+```bash
+$ docker run -d -it --name webhooks lelylanlab/webhooks
+```
+
+### Generate local image
+```bash
+$ docker build --tag=webhooks .
+$ docker run -d -it --name webhooks webhooks
+```
+
 When installing the service in production set [lelylan environment variables](https://github.com/lelylan/lelylan/blob/master/README.md#production).
 
 
 ## Resources
 
-* [Lelylan Realtime API](http://dev.lelylan.com/api#api-realtime) 
+* [Lelylan Realtime API](http://dev.lelylan.com/api#api-realtime)
 
 
 ## Contributing
@@ -34,9 +49,10 @@ Do not forget to provide specs to your contribution.
 
 ### Running specs
 
-    $ npm install
-    $ npm test
-
+```bash
+$ npm install
+$ npm test
+```
 
 ## Coding guidelines
 
