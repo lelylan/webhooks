@@ -65,7 +65,6 @@ describe 'AccessToken', ->
 
     beforeEach ->
       setTimeout ( ->
-        Factory.create 'access_token', { scopes: 'location-read', resource_owner_id: user.id, application_id: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
         Factory.create 'event',        { resource_owner_id: user._id }, (doc) ->
       ), settings.factory_time

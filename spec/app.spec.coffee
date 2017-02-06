@@ -103,7 +103,6 @@ describe 'Event.new()', ->
       setTimeout ( ->
         Factory.create 'access_token', { resource_owner_id: user.id, application_id: application.id }, (doc) ->
         Factory.create 'subscription', { client_id: application.id }, (doc) ->
-        Factory.create 'event',        { resource_owner_id: user._id, resource: 'locations' }, (doc) -> getProcessedEvent(doc)
       ), settings.factory_time
 
     it 'does not make an HTTP request to the subscription URI callback', (done) ->
