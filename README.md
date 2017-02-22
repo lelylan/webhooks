@@ -6,6 +6,7 @@ Realtime HTTP notification from Lelylan to third party apps
 
 Webhooks is tested against Node 0.10.36.
 
+## Configuration: [Documentation](https://github.com/lelylan/webhooks/blob/master/doc/README.md)
 
 ## Installation
 
