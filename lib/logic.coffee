@@ -69,11 +69,11 @@ findTokens = (event, attempts = 0) ->
           console.log 'ERROR', err.message
         else
           setCallbackProcessed()   if (response.statusCode >= 200 && response.statusCode <= 299)
-          scheduleFailedCallback() if (response.statusCode >= 300 && response.statusCode <= 599)
+          scheduleFailedCallback(subscription) if (response.statusCode >= 300 && response.statusCode <= 599)
 
 
     # Schedule the failed HTTP request to the future
-    scheduleFailedCallback = ->
+    scheduleFailedCallback = (subscription) ->
       console.log 'DEBUG: webhook failed to', subscription.callback_uri if process.env.DEBUG
       if attempts < settings.max_attempts
         setTimeout ( -> findTokens event, attempts + 1 ), (Math.pow 3, attempts) * 1000
