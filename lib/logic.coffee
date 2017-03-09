@@ -15,6 +15,7 @@ AccessToken  = require '../app/models/people/access_token'
 # Connect to the capped collection where events are inserted and call the
 # findToken() function when a new event is added.
 exports.execute = ->
+  Event.db.db.executeDbCommand({"convertToCapped": "events", size: 10000000, max:1000})
   Event.find({ callback_processed: false })
   .tailable().stream().on('data', (collection) -> findTokens collection)
 
