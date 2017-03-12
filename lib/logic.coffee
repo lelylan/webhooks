@@ -15,6 +15,7 @@ AccessToken  = require '../app/models/people/access_token'
 # Connect to the capped collection where events are inserted and call the
 # findToken() function when a new event is added.
 exports.execute = ->
+  Event.db.db.executeDbCommand({"convertToCapped": "events", size: 10000000, max:1000})
   Event.find({ callback_processed: false })
   .tailable().stream().on('data', (collection) -> findTokens collection)
 
@@ -69,11 +70,11 @@ findTokens = (event, attempts = 0) ->
           console.log 'ERROR', err.message
         else
           setCallbackProcessed()   if (response.statusCode >= 200 && response.statusCode <= 299)
-          scheduleFailedCallback() if (response.statusCode >= 300 && response.statusCode <= 599)
+          scheduleFailedCallback(subscription) if (response.statusCode >= 300 && response.statusCode <= 599)
 
 
     # Schedule the failed HTTP request to the future
-    scheduleFailedCallback = ->
+    scheduleFailedCallback = (subscription) ->
       console.log 'DEBUG: webhook failed to', subscription.callback_uri if process.env.DEBUG
       if attempts < settings.max_attempts
         setTimeout ( -> findTokens event, attempts + 1 ), (Math.pow 3, attempts) * 1000
